@@ -1,122 +1,157 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<meta name="layout" content="main"/>
-		<title>Welcome to Grails</title>
-		<style type="text/css" media="screen">
-			#status {
-				background-color: #eee;
-				border: .2em solid #fff;
-				margin: 2em 2em 1em;
-				padding: 1em;
-				width: 12em;
-				float: left;
-				-moz-box-shadow: 0px 0px 1.25em #ccc;
-				-webkit-box-shadow: 0px 0px 1.25em #ccc;
-				box-shadow: 0px 0px 1.25em #ccc;
-				-moz-border-radius: 0.6em;
-				-webkit-border-radius: 0.6em;
-				border-radius: 0.6em;
-			}
+<html lang="en">
 
-			.ie6 #status {
-				display: inline; /* float double margin fix http://www.positioniseverything.net/explorer/doubled-margin.html */
-			}
+<head>
 
-			#status ul {
-				font-size: 0.9em;
-				list-style-type: none;
-				margin-bottom: 0.6em;
-				padding: 0;
-			}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-			#status li {
-				line-height: 1.3;
-			}
+    <title>Parent Calendar</title>
 
-			#status h1 {
-				text-transform: uppercase;
-				font-size: 1.1em;
-				margin: 0 0 0.3em;
-			}
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-			#page-body {
-				margin: 2em 1em 1.25em 18em;
-			}
+    <!-- Custom CSS -->
+    <link href="css/simple-sidebar.css" rel="stylesheet">
 
-			h2 {
-				margin-top: 1em;
-				margin-bottom: 0.3em;
-				font-size: 1em;
-			}
+    <link href="css/global.css" rel="stylesheet">
 
-			p {
-				line-height: 1.5;
-				margin: 0.25em 0;
-			}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
 
-			#controller-list ul {
-				list-style-position: inside;
-			}
+</head>
 
-			#controller-list li {
-				line-height: 1.3;
-				list-style-position: inside;
-				margin: 0.25em 0;
-			}
+<body>
 
-			@media screen and (max-width: 480px) {
-				#status {
-					display: none;
-				}
+    <div id="wrapper">
 
-				#page-body {
-					margin: 0 1em 1em;
-				}
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a href="#">
+                        Parent Calendar
+                    </a>
+                </li>
+                <li>
+                    <a href="#">Dashboard</a>
+                </li>
+                <li>
+                    <a href="#">Shortcuts</a>
+                </li>
+                <li>
+                    <a href="#">Overview</a>
+                </li>
+                <li>
+                    <a href="#">Events</a>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                </li>
+                <li>
+                    <a href="#">Services</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
 
-				#page-body h1 {
-					margin-top: 0;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<a href="#page-body" class="skip"><g:message code="default.link.skip.label" default="Skip to content&hellip;"/></a>
-		<div id="status" role="complementary">
-			<h1>Application Status</h1>
-			<ul>
-				<li>App version: <g:meta name="app.version"/></li>
-				<li>Grails version: <g:meta name="app.grails.version"/></li>
-				<li>Groovy version: ${GroovySystem.getVersion()}</li>
-				<li>JVM version: ${System.getProperty('java.version')}</li>
-				<li>Reloading active: ${grails.util.Environment.reloadingAgentEnabled}</li>
-				<li>Controllers: ${grailsApplication.controllerClasses.size()}</li>
-				<li>Domains: ${grailsApplication.domainClasses.size()}</li>
-				<li>Services: ${grailsApplication.serviceClasses.size()}</li>
-				<li>Tag Libraries: ${grailsApplication.tagLibClasses.size()}</li>
-			</ul>
-			<h1>Installed Plugins</h1>
-			<ul>
-				<g:each var="plugin" in="${applicationContext.getBean('pluginManager').allPlugins}">
-					<li>${plugin.name} - ${plugin.version}</li>
-				</g:each>
-			</ul>
-		</div>
-		<div id="page-body" role="main">
-			<h1>Welcome to Grails</h1>
-			<p>Congratulations, you have successfully started your first Grails application! At the moment
-			   this is the default page, feel free to modify it to either redirect to a controller or display whatever
-			   content you may choose. Below is a list of controllers that are currently deployed in this application,
-			   click on each to execute its default action:</p>
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1>Parent Calendar</h1>
+                        <p>Parent calendar management.</p>
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
 
-			<div id="controller-list" role="navigation">
-				<h2>Available Controllers:</h2>
-				<ul>
-					<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-						<li class="controller"><g:link controller="${c.logicalPropertyName}">${c.fullName}</g:link></li>
-					</g:each>
-				</ul>
-			</div>
-		</div>
-	</body>
+                        <!-- Calendar Area -->
+                        <table style="margin: 25px 0px 0px 0px; border: 1px solid #aaa;">
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                            <tr>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                                <td class="td-day-container"><div class="calendar-day-container"></div></td>
+                            </tr>
+                        </table>
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#menu-toggle").click(function(e) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+</body>
+
 </html>
