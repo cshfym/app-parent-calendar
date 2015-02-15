@@ -1,12 +1,47 @@
-.calendar-day-container {
-    margin: 0px;
-    width: 100px;
-    height: 75px;
-    border: 1px solid #a0a0a0;
-    border-radius: 5px;
-
+.table-month-container {
+    width: 100%;
+    min-width: 800px;
+    border: 1px solid #aaa;
 }
 
 .td-day-container {
-    padding: 2px;
+    padding: 1px;
+    width: 14%;
 }
+
+.calendar-day-container {
+    margin: 0px;
+    border: 1px solid #a0a0a0;
+    border-radius: 5px;
+}
+
+.calendar-day-header {
+    border: 1px solid #a0a0a0;
+    margin: 0px;
+    background-color: #7785aa;
+    color: #fff;
+    height: 30px;
+    border: 0px;
+    text-align: center;
+}
+
+.calendar-navigation-wrapper {
+    width: 100%;
+    margin: 25px 0px 10px 0px;
+}
+
+.calendar-nagivation {
+    float: right;
+}
+
+.calendar-month-year {
+    float: left;
+    font-size: 24px;
+    padding: 0px 0px 0px 25px;
+}
+
+.today {
+    border: 1px solid #606060;
+    background-color: #aaccf5;
+}
+

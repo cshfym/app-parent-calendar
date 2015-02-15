@@ -1,2 +1,2 @@
-# parent-time
-Primary application for parent-time domain.
+# parent-calendar
+Primary application for parent-calendar domain.
