@@ -14,7 +14,8 @@ function adjustCalendarHeight() {
 }
 
 function changeCalendarMonth(days) {
-  var link = "/app-parent-calendar/calendar/changeCalendarMonth";
+  var link = "${createLink(controller:'calendar',action:'changeCalendarMonth')}"
+  //var link = "/app-parent-calendar/calendar/changeCalendarMonth";
   var parameters = { adjust: days };
   $.ajax({
     type: "POST",
@@ -33,7 +34,8 @@ function changeCalendarMonth(days) {
 }
 
 function changeCalendarToday() {
-  var link = "/app-parent-calendar/calendar/changeCalendarToday";
+  var link = "${createLink(controller:'calendar',action:'changeCalendarToday')}"
+  //var link = "/app-parent-calendar/calendar/changeCalendarToday";
   var parameters = { };
   $.ajax({
     type: "POST",
@@ -52,7 +54,8 @@ function changeCalendarToday() {
 }
 
 function changeNextYear() {
-  var link = "/app-parent-calendar/calendar/changeNextYear";
+  var link = "${createLink(controller:'calendar',action:'changeNextYear')}"
+  //var link = "/app-parent-calendar/calendar/changeNextYear";
   var parameters = { };
   $.ajax({
     type: "POST",
