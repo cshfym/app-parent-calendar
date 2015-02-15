@@ -11,6 +11,7 @@
 /plugins
 /web-app/plugins
 /target
+/out
 *.iml
 *.classpath
 *.idea

@@ -9,7 +9,7 @@
     <!-- Calendar Navigation -->
     <div class="calendar-nagivation">
       <button type="button" class="btn btn-success" style="width: 100px;" onclick="changeCalendarToday()">
-        Today
+        Today&nbsp;<span class="glyphicon glyphicon-calendar"></span>
       </button>
       &nbsp;&nbsp;&nbsp;
       <button type="button" class="btn btn-info" style="width: 150px;" onclick="changeCalendarMonth(-1)">
