@@ -3,9 +3,12 @@ package com.parentcalendar.controller
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.domain.ui.UIDay
 import com.parentcalendar.domain.ui.UIWeek
+import com.parentcalendar.service.TestService
 import grails.converters.JSON
 
 class CalendarController {
+
+  TestService testService
 
   UICalendar uiCalendar
 
