@@ -51,10 +51,12 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
-        // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
-        // runtime 'mysql:mysql-connector-java:5.1.27'
-        // runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
-        // compile "com.parentcalendar:lib-parent-calendar:1.0"
+      // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
+      // runtime 'mysql:mysql-connector-java:5.1.27'
+      // runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
+      // compile "com.parentcalendar:lib-parent-calendar:1.0"
+
+      compile "redis.clients:jedis:2.2.1"
     }
 
     plugins {

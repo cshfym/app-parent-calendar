@@ -1,25 +1,48 @@
 package com.parentcalendar.services.rest
 
+import com.google.gson.Gson
 import com.parentcalendar.domain.core.User
+import com.parentcalendar.services.cache.Cacheable
+import com.parentcalendar.services.cache.RedisCacheService
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
+import org.apache.commons.logging.LogFactory
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.beans.factory.annotation.Autowired
 
 @Transactional
 class UserDataService {
+
+  private static final log = LogFactory.getLog(this)
 
   def grailsApplication
 
   @Autowired
   RestDataService restDataService
 
+  @Autowired
+  RedisCacheService cacheService
+
+  @Autowired
+  Gson gson
+
+  //@Cacheable
   List<User> getAllUsers() {
 
     def data = []
 
     def endpoint =
       grailsApplication.config.calendarData.host +
-      grailsApplication.config.calendarData.endpoints.user
+      grailsApplication.config.calendarData.endpoints.user as String
+
+    def cachedData = cacheService.getCache(endpoint)
+    if (cachedData) {
+      def list = gson.fromJson(cachedData, List.class)
+      list.each {
+        data << new User(it)
+      }
+      return data
+    }
 
     def response = restDataService.get(
       endpoint as String,
@@ -28,10 +51,11 @@ class UserDataService {
 
     if (response?.status == 200) {
       response?.json.each {
-        println it
         data << new User(it)
       }
     }
+
+    cacheService.setCache(endpoint, gson.toJson(data), com.parentcalendar.domain.core.User.TTL)
 
     data
   }

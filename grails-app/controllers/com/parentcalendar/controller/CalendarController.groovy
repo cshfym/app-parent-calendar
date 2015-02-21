@@ -2,9 +2,12 @@ package com.parentcalendar.controller
 
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.services.rest.UserDataService
+import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
 class CalendarController {
+
+  private static final log = LogFactory.getLog(this)
 
   @Autowired
   UserDataService userDataService
