@@ -105,28 +105,17 @@ environments {
 }
 
 // log4j configuration
+def appName = "${appName}"
 log4j = {
 
   appenders {
-    rollingFile name:"errorLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/app-error.log", 'append':true, threshold:org.apache.log4j.Level.ERROR
-    rollingFile name:"warnLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/app-warn.log", 'append':true, threshold:org.apache.log4j.Level.WARN
-    rollingFile name:"debugLog", maxFileSize:"10MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/app-debug.log", 'append':true, threshold:org.apache.log4j.Level.INFO
+    rollingFile name:"errorLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-error.log", 'append':true, threshold:org.apache.log4j.Level.ERROR
+    rollingFile name:"warnLog", maxFileSize:"1MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-warn.log", 'append':true, threshold:org.apache.log4j.Level.WARN
+    rollingFile name:"debugLog", maxFileSize:"10MB", maxBackupIndex: 10, file:"/var/log/parent-calendar/${appName}-debug.log", 'append':true, threshold:org.apache.log4j.Level.INFO
     console name:"stdout", threshold:org.apache.log4j.Level.WARN
   }
 
   root {
     info "debugLog", "warnLog", "errorLog", "stdout"
   }
-
-  error  'org.codehaus.groovy.grails.web.servlet',        // controllers
-         'org.codehaus.groovy.grails.web.pages',          // GSP
-         'org.codehaus.groovy.grails.web.sitemesh',       // layouts
-         'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
-         'org.codehaus.groovy.grails.web.mapping',        // URL mapping
-         'org.codehaus.groovy.grails.commons',            // core / classloading
-         'org.codehaus.groovy.grails.plugins',            // plugins
-         'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
-         'org.springframework',
-         'org.hibernate',
-         'net.sf.ehcache.hibernate'
 }
