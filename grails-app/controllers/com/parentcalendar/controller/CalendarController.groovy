@@ -1,19 +1,23 @@
 package com.parentcalendar.controller
 
 import com.parentcalendar.domain.ui.UICalendar
-import com.parentcalendar.domain.ui.UIDay
-import com.parentcalendar.domain.ui.UIWeek
-import grails.converters.JSON
+import com.parentcalendar.services.rest.UserDataService
+import org.springframework.beans.factory.annotation.Autowired
 
 class CalendarController {
+
+  @Autowired
+  UserDataService userDataService
 
   UICalendar uiCalendar
 
   def index() {
 
+    def userlist = userDataService.getAllUsers()
+
     uiCalendar = new UICalendar()
 
-    [ calendar: uiCalendar, today: new Date() ]
+    [ calendar: uiCalendar, today: new Date(), users: userlist ]
   }
 
   def changeCalendarMonth = {

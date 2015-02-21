@@ -93,6 +93,17 @@
         </div>
         <!-- /#page-content-wrapper -->
 
+        <div>
+          <table style="width: 200px; margin-top: 20px;" border="1">
+            <thead><td>ID</td><td>Active</td><td>Email</td></thead>
+            <g:each in="${users}" var="user">
+              <tr>
+                <td>${user.id}</td><td>${user.active}</td><td>${user.email}</td>
+              </tr>
+            </g:each>
+          </table>
+
+        </div>
     </div>
     <!-- /#wrapper -->
 
