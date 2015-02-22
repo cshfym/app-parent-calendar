@@ -4,7 +4,9 @@ import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.services.rest.UserDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.access.annotation.Secured
 
+@Secured(['ROLE_ADMIN'])
 class CalendarController {
 
   private static final log = LogFactory.getLog(this)

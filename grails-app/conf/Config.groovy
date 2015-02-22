@@ -119,3 +119,20 @@ log4j = {
     info "debugLog", "warnLog", "errorLog", "stdout"
   }
 }
+
+
+// Added by the Spring Security Core plugin:
+grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.parentcalendar.domain.security.User'
+grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.parentcalendar.domain.security.UserRole'
+grails.plugin.springsecurity.authority.className = 'com.parentcalendar.domain.security.Role'
+grails.plugin.springsecurity.controllerAnnotations.staticRules = [
+	'/':                              ['permitAll'],
+	'/index':                         ['permitAll'],
+	'/index.gsp':                     ['permitAll'],
+	'/assets/**':                     ['permitAll'],
+	'/**/js/**':                      ['permitAll'],
+	'/**/css/**':                     ['permitAll'],
+	'/**/images/**':                  ['permitAll'],
+	'/**/favicon.ico':                ['permitAll']
+]
+

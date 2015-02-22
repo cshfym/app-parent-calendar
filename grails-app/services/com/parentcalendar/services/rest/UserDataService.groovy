@@ -17,6 +17,8 @@ class UserDataService {
 
   def grailsApplication
 
+  private static final String DATA_PATH = "/user"
+
   @Autowired
   RestDataService restDataService
 
@@ -32,8 +34,7 @@ class UserDataService {
     def data = []
 
     def endpoint =
-      grailsApplication.config.calendarData.host +
-      grailsApplication.config.calendarData.endpoints.user as String
+      grailsApplication.config.calendarData.host + DATA_PATH as String
 
     def cachedData = cacheService.getCache(endpoint)
     if (cachedData) {

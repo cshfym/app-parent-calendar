@@ -33,7 +33,12 @@ class RedisCacheService {
 
   public void setCache(String key, String data, int ttl) {
 
-    Jedis jedis = getPool().getResource()
+    Jedis jedis = getPool()?.getResource()
+
+    if (!jedis || !key || !data) {
+      return // Caching not available.
+    }
+
     jedis.set(key, data)
     jedis.expire(key, ttl)
     log.info("Setting cache at key $key for $ttl.")
@@ -42,10 +47,13 @@ class RedisCacheService {
 
   public String getCache(String key) {
 
-    String data
+    Jedis jedis = getPool()?.getResource()
 
-    Jedis jedis = getPool().getResource()
-    data = jedis.get(key)
+    if (!jedis || !key) {
+      return null // Caching not available.
+    }
+
+    String data = jedis.get(key)
     getPool().returnResource(jedis)
 
     if (!data) {
@@ -76,8 +84,13 @@ class RedisCacheService {
           Protocol.DEFAULT_TIMEOUT,
           getRedisAuthentication())
       } catch (URISyntaxException ex) {
-        log.error ex.getStackTrace(), ex
-        throw ex
+        log.warn ex.getStackTrace(), ex
+        log.warn "Caching will NOT be available."
+        // Caching not available - log and swallow exception.
+      } catch (Exception ex) {
+        log.warn ex.getStackTrace(), ex
+        log.warn "Caching will NOT be available."
+        // Caching not available - log and swallow exception.
       }
     }
   }
