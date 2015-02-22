@@ -27,15 +27,15 @@ class UserRole implements Serializable {
 
 	static UserRole get(long userId, long roleId) {
 		UserRole.where {
-			user == User.load(userId) &&
-			role == Role.load(roleId)
+      user == User.find { id == userId } &&
+      role == Role.find { id == roleId }
 		}.get()
 	}
 
 	static boolean exists(long userId, long roleId) {
 		UserRole.where {
-			user == User.load(userId) &&
-			role == Role.load(roleId)
+			user == User.find { id == userId } &&
+			role == Role.find { id == roleId }
 		}.count() > 0
 	}
 
@@ -49,8 +49,8 @@ class UserRole implements Serializable {
 		if (u == null || r == null) return false
 
 		int rowCount = UserRole.where {
-			user == User.load(u.id) &&
-			role == Role.load(r.id)
+      user == User.find { id == u.id } &&
+      role == Role.find { id == r.id }
 		}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }
@@ -62,7 +62,7 @@ class UserRole implements Serializable {
 		if (u == null) return
 
 		UserRole.where {
-			user == User.load(u.id)
+			user == User.find { id == u.id }
 		}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }
@@ -72,7 +72,7 @@ class UserRole implements Serializable {
 		if (r == null) return
 
 		UserRole.where {
-			role == Role.load(r.id)
+			role == Role.find { id == r.id }
 		}.deleteAll()
 
 		if (flush) { UserRole.withSession { it.flush() } }

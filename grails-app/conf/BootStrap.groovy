@@ -5,18 +5,21 @@ import com.parentcalendar.domain.security.UserRole
 class BootStrap {
 
     def init = { servletContext ->
+/*
+      def adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
+      def userRole = new Role(authority: 'ROLE_USER').save(flush: true)
 
-        def adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
-        def userRole = new Role(authority: 'ROLE_USER').save(flush: true)
+      //def adminRole = Role.find { authority == "ROLE_ADMIN" }
 
-        def testUser = new User(username: 'me', password: 'password')
-        testUser.save(flush: true)
+      def testUser = new User(username: 'test_1', password: 'neo', email: "test_1@gmail.com")
+      testUser.save(flush: true)
+*/
 
-        UserRole.create testUser, adminRole, true
+      def adminRole = Role.find { authority == "ROLE_ADMIN" }
+      def testUser = User.find { username == "test_1" }
 
-        assert User.count() == 1
-        assert Role.count() == 2
-        assert UserRole.count() == 1
+
+      UserRole.create(testUser,adminRole,true)
     }
 
     def destroy = {
