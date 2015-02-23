@@ -1,3 +1,5 @@
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -13,7 +15,8 @@
 
 // External configuration
 grails.config.locations = [
-  "file:/etc/grails/app-pc-config.groovy"
+  "file:/etc/grails/app-pc-config.groovy",
+  "file:/etc/grails/datasource.groovy"
 ]
 
 grails.project.groupId = appName // change this to alter the default package name and Maven publishing destination
@@ -120,7 +123,6 @@ log4j = {
   }
 }
 
-
 // Added by the Spring Security Core plugin:
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'com.parentcalendar.domain.security.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'com.parentcalendar.domain.security.UserRole'
@@ -135,4 +137,3 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/images/**':                  ['permitAll'],
 	'/**/favicon.ico':                ['permitAll']
 ]
-
