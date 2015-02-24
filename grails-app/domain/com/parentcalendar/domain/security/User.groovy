@@ -1,8 +1,11 @@
 package com.parentcalendar.domain.security
 
 class User {
+
   transient springSecurityService
 
+  Long id
+  Long version
   String email
   String username
   String password

@@ -67,32 +67,24 @@
         </div>
         <!-- /#sidebar-wrapper -->
 
-        <!-- Page Content -->
-        <div id="page-content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-
-                      <g:form controller="calendar">
-                        <div style="float: left;">
-                          <h1>Parent Calendar</h1>
-                          <p><span style="font-style: italic;">Time management for parents and co-parents.</span></p>
-                        </div>
-                        <div style="float:right">
-                          <a href="#menu-toggle" class="btn btn-default" id="menu-toggle">Toggle Menu</a>
-                        </div>
-                        <div style="clear: both;" action="nextCalendarMonth" />
-
-                        <g:render template="calendar" />
-
-                      </g:form>
-
-                    </div>
-                </div>
-            </div>
+        <div>
+          <table style="width: 100%; margin: 20px; font-size: 10px;" border="1">
+            <thead><td>Users</td></thead>
+            <g:each in="${users}" var="user">
+              <tr>
+                <td>${user}</td>
+              </tr>
+            </g:each>
+          </table>
+          <table style="width: 100%; margin: 20px; font-size: 10px;" border="1">
+            <thead><td>Calendars</td></thead>
+            <g:each in="${calendars}" var="calendar">
+                <tr>
+                    <td>${calendar}</td>
+                </tr>
+            </g:each>
+          </table>
         </div>
-        <!-- /#page-content-wrapper -->
-
     </div>
     <!-- /#wrapper -->
 

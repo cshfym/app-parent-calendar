@@ -1,28 +1,21 @@
 package com.parentcalendar.controller
 
 import com.parentcalendar.domain.ui.UICalendar
-import com.parentcalendar.services.rest.UserDataService
 import org.apache.commons.logging.LogFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 
-@Secured(['ROLE_ADMIN'])
+@Secured(['ROLE_USER'])
 class CalendarController {
 
   private static final log = LogFactory.getLog(this)
-
-  @Autowired
-  UserDataService userDataService
 
   UICalendar uiCalendar
 
   def index() {
 
-    def userlist = userDataService.getAllUsers()
-
     uiCalendar = new UICalendar()
 
-    [ calendar: uiCalendar, today: new Date(), users: userlist ]
+    [ calendar: uiCalendar, today: new Date()]
   }
 
   def changeCalendarMonth = {

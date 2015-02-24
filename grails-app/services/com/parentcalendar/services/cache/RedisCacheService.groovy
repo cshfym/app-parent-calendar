@@ -1,6 +1,7 @@
 package com.parentcalendar.services.cache
 
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonSyntaxException
 import org.apache.commons.logging.LogFactory
 import org.aspectj.lang.ProceedingJoinPoint
@@ -26,8 +27,7 @@ class RedisCacheService {
 
   private static final log = LogFactory.getLog(this)
 
-  @Autowired
-  private Gson gson
+  Gson gson = new GsonBuilder().setDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz").create();
 
   private JedisPool pool
 

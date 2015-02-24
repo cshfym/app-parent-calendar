@@ -137,3 +137,5 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/images/**':                  ['permitAll'],
 	'/**/favicon.ico':                ['permitAll']
 ]
+
+gson.dateformat = "EEE, dd MMM yyyy HH:mm:ss zzz"
