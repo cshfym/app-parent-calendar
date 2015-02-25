@@ -20,14 +20,14 @@
     margin: 0px;
     background-color: #7785aa;
     color: #fff;
-    height: 30px;
+    height: 25px;
     border: 0px;
     text-align: center;
 }
 
 .calendar-navigation-wrapper {
     width: 100%;
-    margin: 25px 0px 10px 0px;
+    margin: 0px 0px 10px 0px;
 }
 
 .calendar-nagivation {
@@ -36,7 +36,7 @@
 
 .calendar-month-year {
     float: left;
-    font-size: 24px;
+    font-size: 28px;
     padding: 0px 0px 0px 25px;
 }
 
