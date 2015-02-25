@@ -4,7 +4,8 @@ $(document).ready(function() {
 });
 
 function adjustCalendarHeight() {
-  var tableHeight = $(window).height() - 350;
+  var tableHeight = $(window).height() - 250;
+  if (tableHeight < 500) { tableHeight = 500; }
   var weekCount = $("#weekCount").val();
   if(!weekCount) {
     weekCount = 5;

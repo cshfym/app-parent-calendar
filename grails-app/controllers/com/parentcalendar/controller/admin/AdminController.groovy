@@ -1,4 +1,4 @@
-package app.parent.calendar
+package com.parentcalendar.controller.admin
 
 import com.parentcalendar.services.data.CalendarDataService
 import com.parentcalendar.services.data.UserDataService
