@@ -22,7 +22,7 @@ abstract class BaseDataService implements IDataService {
 
     Gson gson
 
-    public <T> List<T> getAll(Type listType) {
+    public <T> List<T> getAll(Type type, Type listType) {
 
         // TODO Performance on this?
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
@@ -45,7 +45,9 @@ abstract class BaseDataService implements IDataService {
 
         if (response?.status == 200) {
             response?.json.each {
-                data << gson.fromJson(it.toString(), T.class)
+                // def obj = gson.fromJson(it.toString(), T.class)
+                def obj = gson.fromJson(it.toString(), type)
+                data << obj
             }
         }
 

@@ -15,7 +15,7 @@ class UserDataService extends BaseDataService {
   private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
 
   List<CoreUser> getAllUsers() {
-    super.getAll(typeToken)
+    super.getAll(CoreUser.class, typeToken)
   }
 
   def getTTL() { 30 }

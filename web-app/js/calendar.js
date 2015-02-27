@@ -14,6 +14,14 @@ function adjustCalendarHeight() {
   $(".calendar-day-container").height(tableHeight / weekCount);
 }
 
+function highlightDay(id) {
+  $("#" + id).attr("class", "highlight-day");
+}
+function unHighlightDay(id) {
+  $("#" + id).attr("class", "");
+}
+
+
 function changeCalendarMonth(days) {
   var link = "/app-parent-calendar/calendar/changeCalendarMonth";
   var parameters = { adjust: days };
@@ -31,6 +39,25 @@ function changeCalendarMonth(days) {
     },
     complete: function() { }
   });
+}
+
+function changeCalendarWeek(weeks) {
+    var link = "/app-parent-calendar/calendar/changeCalendarWeek";
+    var parameters = { adjust: weeks };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarHeight();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
 }
 
 function changeCalendarToday() {
@@ -52,6 +79,25 @@ function changeCalendarToday() {
   });
 }
 
+function selectDay(id) {
+    var link = "/app-parent-calendar/calendar/selectCalendarDay";
+    var parameters = { selectedDay: id.replace("day_","") };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarHeight();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
+}
+
 function changeNextYear() {
   var link = "/app-parent-calendar/calendar/changeNextYear";
   var parameters = { };
@@ -69,4 +115,23 @@ function changeNextYear() {
     },
     complete: function() { }
   });
+}
+
+function switchView(view) {
+    var link = "/app-parent-calendar/calendar/switchView";
+    var parameters = { viewType: view};
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarHeight();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
 }

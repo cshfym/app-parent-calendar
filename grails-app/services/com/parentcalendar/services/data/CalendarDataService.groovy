@@ -14,10 +14,10 @@ class CalendarDataService extends BaseDataService {
 
     private static final log = LogFactory.getLog(this)
 
-    private Type typeToken = new TypeToken<ArrayList<User>>(){}.getType();
+    private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
     List<Calendar> getAllCalendars() {
-        super.getAll(typeToken)
+        super.getAll(Calendar.class, typeToken)
     }
 
     def getTTL() { 30 }

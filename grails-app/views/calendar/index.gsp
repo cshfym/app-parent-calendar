@@ -34,7 +34,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-                        <g:render template="calendar" />
+
+                        <g:if test="${calendar.weekView}">
+                            <g:render template="weekView" />
+                        </g:if>
+                        <g:else>
+                            <g:render template="monthView" />
+                        </g:else>
                     </div>
                 </div>
             </div>

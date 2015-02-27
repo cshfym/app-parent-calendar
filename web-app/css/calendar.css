@@ -13,6 +13,7 @@
     margin: 0px;
     border: 1px solid #a0a0a0;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .calendar-day-header {
@@ -43,5 +44,13 @@
 .today {
     border: 1px solid #606060;
     background-color: #aaccf5;
+}
+.selected-date {
+    border: 2px dotted darkred;
+    background-color: lightgray;
+}
+.highlight-day {
+    border: 1px solid darkslategray;
+    border-radius: 5px;
 }
 

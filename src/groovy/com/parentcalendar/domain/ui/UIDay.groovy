@@ -13,6 +13,10 @@ class UIDay {
     toCalendar().get(Calendar.DAY_OF_MONTH).toString()
   }
 
+  public String getCondensedDateString() {
+    new SimpleDateFormat("MM-dd-yyyy", Locale.ENGLISH).format(date)
+  }
+
   public String dayOfWeekName() {
     new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date)
   }

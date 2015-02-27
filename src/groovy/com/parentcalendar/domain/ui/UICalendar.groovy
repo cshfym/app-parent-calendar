@@ -15,6 +15,7 @@ class UICalendar {
   /* INSTANCE ATTRIBUTES */
   Date date
   List<UIWeek> weeks = []
+  boolean weekView = false
 
   /**
    * Default Constructor
@@ -48,11 +49,41 @@ class UICalendar {
     weeks[0].days.each { day ->
       list.add(day.dayOfWeekName())
       cnt++
-      if(cnt == 7) {
+      if (cnt == 7) {
         return
       }
     }
     list
+  }
+
+  public int getVisibleWeekCount() {
+
+    (this.weekView) ? 1 : this.weeks.size()
+  }
+
+  /**
+   * Returns the week belonging to the currently selected date.
+   * @return
+  */
+  public UIWeek getCurrentDateWeek() {
+
+    UIWeek currentWeek
+
+    this.weeks.each { week ->
+      week.days.each { day ->
+        if (day.date == this.date) {
+            currentWeek = week
+            return
+        }
+      }
+      if (currentWeek) { return }
+    }
+
+    currentWeek
+  }
+
+  public boolean isSelectedDate(Date compareDate) {
+    (this.date == compareDate) ? true : false
   }
 
   public void setToday() {
@@ -64,10 +95,19 @@ class UICalendar {
   }
 
   public void changeMonth(int value) {
-    Calendar nextMonth = Calendar.getInstance()
-    nextMonth.setTime(this.date)
-    nextMonth.add(Calendar.MONTH, value)
-    this.date = nextMonth.getTime()
+    Calendar adjMonth = Calendar.getInstance()
+    adjMonth.setTime(this.date)
+    adjMonth.add(Calendar.MONTH, value)
+    this.date = adjMonth.getTime()
+
+    build()
+  }
+
+  public void changeWeek(int value) {
+    Calendar adjWeek = Calendar.getInstance()
+    adjWeek.setTime(this.date)
+    adjWeek.add(Calendar.WEEK_OF_YEAR, value)
+    this.date = adjWeek.getTime()
 
     build()
   }
@@ -103,12 +143,12 @@ class UICalendar {
   }
 
   /**
-   * Builds the current UICalendar object based on the
+   * Builds the current UICalendar object based on the object date.
    */
   protected void build() {
 
     // NOTE - Calendar operations are ZERO-based and assume SUNDAY as the first day of the week.
-    // Can be modified using today.setFirstDayOfWeek(Calendar.MONDAY)
+    // Can be modified using today.setFirstDayOfWeek(Calendar.MONDAY) ??
 
     weeks = []
 

@@ -4,6 +4,8 @@ import com.parentcalendar.domain.ui.UICalendar
 import org.apache.commons.logging.LogFactory
 import org.springframework.security.access.annotation.Secured
 
+import java.text.SimpleDateFormat
+
 @Secured(['ROLE_USER'])
 class CalendarController {
 
@@ -26,7 +28,18 @@ class CalendarController {
       uiCalendar = new UICalendar()
     }
 
-    render (template: "calendar", model: [ calendar: uiCalendar, today: new Date() ])
+    render (template: "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+  }
+
+  def changeCalendarWeek = {
+
+    if (uiCalendar) {
+        uiCalendar.changeWeek(Integer.parseInt(params.adjust))
+    } else {
+        uiCalendar = new UICalendar()
+    }
+
+    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
   }
 
   def changeCalendarToday = {
@@ -37,7 +50,19 @@ class CalendarController {
       uiCalendar = new UICalendar()
     }
 
-    render (template: "calendar", model: [ calendar: uiCalendar, today: new Date() ])
+    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+  }
+
+  def selectCalendarDay = {
+
+    if (!uiCalendar) {
+      uiCalendar = new UICalendar()
+    }
+
+    def newDate = new SimpleDateFormat("MM-dd-yyyy").parse(params.selectedDay)
+    uiCalendar.date = newDate
+
+    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
   }
 
   def changeNextYear = {
@@ -48,6 +73,18 @@ class CalendarController {
       uiCalendar = new UICalendar()
     }
 
-    render (template: "calendar", model: [ calendar: uiCalendar, today: new Date() ])
+    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+  }
+
+  def switchView = {
+
+    if (uiCalendar) {
+      uiCalendar.weekView = (params.viewType.toLowerCase() == "week") ? true : false
+    } else {
+      uiCalendar = new UICalendar()
+    }
+
+    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+
   }
 }
