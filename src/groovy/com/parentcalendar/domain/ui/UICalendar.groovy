@@ -1,5 +1,7 @@
 package com.parentcalendar.domain.ui
 
+import org.joda.time.DateTime
+
 import java.text.SimpleDateFormat
 
 /**
@@ -57,13 +59,12 @@ class UICalendar {
   }
 
   public int getVisibleWeekCount() {
-
     (this.weekView) ? 1 : this.weeks.size()
   }
 
   /**
    * Returns the week belonging to the currently selected date.
-   * @return
+   * @return UIWeek
   */
   public UIWeek getCurrentDateWeek() {
 
@@ -82,9 +83,12 @@ class UICalendar {
     currentWeek
   }
 
-  public boolean isSelectedDate(Date compareDate) {
-    (this.date == compareDate) ? true : false
+    /*
+  public boolean isSelectedDate(Date date) {
+    DateTime compareDate = new DateTime(date.getTime())
+    compareDate.withTimeAtStartOfDay().equals(new DateTime(this.date.getTime()).withTimeAtStartOfDay())
   }
+      */
 
   public void setToday() {
     Calendar today = Calendar.getInstance()
@@ -145,7 +149,7 @@ class UICalendar {
   /**
    * Builds the current UICalendar object based on the object date.
    */
-  protected void build() {
+  public void build() {
 
     // NOTE - Calendar operations are ZERO-based and assume SUNDAY as the first day of the week.
     // Can be modified using today.setFirstDayOfWeek(Calendar.MONDAY) ??
@@ -177,7 +181,7 @@ class UICalendar {
 
     (1..totalWeeksDisplayed).each {
       (1..DAYS_PER_WEEK).each { dayNumber ->
-        days.add(new UIDay(date: startingDay.time))
+        days.add(new UIDay(date: startingDay.time, inCalendarMonth: (startingDay.get(Calendar.MONTH) == instanceCalendar.get(Calendar.MONTH))))
         if ((dayNumber % 7) == 0) {
           this.weeks.add(new UIWeek(days: days))
           days = []

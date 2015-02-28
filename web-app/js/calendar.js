@@ -15,10 +15,16 @@ function adjustCalendarHeight() {
 }
 
 function highlightDay(id) {
-  $("#" + id).attr("class", "highlight-day");
+  $("#" + id).attr("class", "calendar-day-container highlight-day");
 }
 function unHighlightDay(id) {
-  $("#" + id).attr("class", "");
+  $("#" + id).attr("class", "calendar-day-container");
+}
+function highlightToday(id) {
+  $("#" + id).attr("class", "calendar-day-container highlight-today");
+}
+function unHighlightToday(id) {
+    $("#" + id).attr("class", "calendar-day-container today");
 }
 
 

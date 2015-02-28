@@ -11,7 +11,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <!-- Bootstrap Core CSS -->
-		<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.min.css')}" type="text/css">
+		<link rel="stylesheet" href="${resource(dir: 'css', file: 'bootstrap.css')}" type="text/css">
 
         <!-- Global CSS -->
 		<link rel="stylesheet" href="${resource(dir: 'css', file: 'global.css')}" type="text/css">

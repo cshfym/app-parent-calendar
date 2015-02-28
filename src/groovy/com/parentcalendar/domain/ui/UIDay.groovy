@@ -9,6 +9,8 @@ class UIDay {
 
   Date date
 
+  boolean inCalendarMonth = false
+
   public String getDayNumber() {
     toCalendar().get(Calendar.DAY_OF_MONTH).toString()
   }

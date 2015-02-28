@@ -57,6 +57,7 @@ grails.project.dependency.resolution = {
       // compile "com.parentcalendar:lib-parent-calendar:1.0"
 
       compile "redis.clients:jedis:2.2.1"
+      compile "joda-time:joda-time:2.7"
     }
 
     plugins {

@@ -17,18 +17,36 @@
           <g:each in="${calendar.weeks}" var="week">
             <tr>
               <g:each in="${week.days}" var="day">
-                <td id="day_${day.getCondensedDateString()}" class="td-day-container"
-                    onmouseover="highlightDay(this.id)"
-                    onmouseout="unHighlightDay(this.id)"
-                    onclick="selectDay(this.id)"> <!-- TODO Move this to inner div. -->
+                <td class="td-day-container">
                   <g:if test="${day.isToday()}">
-                    <div class="calendar-day-container today">${day.getDayNumber()}</div>
+                    <div id="day_${day.getCondensedDateString()}" class="calendar-day-container today"
+                         onmouseover="highlightToday(this.id)" onmouseout="unHighlightToday(this.id)" onclick="selectDay(this.id)">
+                        <g:if test="${day?.isInCalendarMonth()}">
+                            <div class="day-number">
+                                ${day?.getDayNumber()}
+                            </div>
+                        </g:if>
+                        <g:else>
+                            <div class="day-number-not-in-month">
+                                ${day?.getDayNumber()}
+                            </div>
+                        </g:else>
+                    </div>
                   </g:if>
-                  <g:elseif test="${calendar.isSelectedDate(day.date)}">
-                        <div class="calendar-day-container selected-date">${day.getDayNumber()}</div>
-                  </g:elseif>
                   <g:else>
-                    <div class="calendar-day-container">${day.getDayNumber()}</div>
+                    <div id="day_${day.getCondensedDateString()}" class="calendar-day-container not-in-month"
+                       onmouseover="highlightDay(this.id)" onmouseout="unHighlightDay(this.id)" onclick="selectDay(this.id)">
+                        <g:if test="${day?.isInCalendarMonth()}">
+                            <div class="day-number">
+                                ${day?.getDayNumber()}
+                            </div>
+                        </g:if>
+                        <g:else>
+                            <div class="day-number-not-in-month">
+                                ${day?.getDayNumber()}
+                            </div>
+                        </g:else>
+                    </div>
                   </g:else>
                 </td>
               </g:each>

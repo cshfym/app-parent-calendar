@@ -62,6 +62,8 @@ class CalendarController {
     def newDate = new SimpleDateFormat("MM-dd-yyyy").parse(params.selectedDay)
     uiCalendar.date = newDate
 
+    uiCalendar.build()
+
     render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
   }
 

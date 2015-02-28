@@ -15,7 +15,6 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
 .calendar-day-header {
     border: 1px solid #a0a0a0;
     margin: 0px;
@@ -45,12 +44,27 @@
     border: 1px solid #606060;
     background-color: #aaccf5;
 }
-.selected-date {
-    border: 2px dotted darkred;
-    background-color: lightgray;
-}
 .highlight-day {
-    border: 1px solid darkslategray;
+    border: 1px solid darkred;
     border-radius: 5px;
 }
-
+.highlight-today {
+    border: 1px solid darkred;
+    background-color: #aaccf5;
+}
+.day-number {
+    height: 20px;
+    width: 20px;
+    margin: 3px;
+    text-align: center;
+    vertical-align: middle;
+    color: #060626;
+}
+.day-number-not-in-month {
+    height: 20px;
+    width: 20px;
+    margin: 3px;
+    text-align: center;
+    vertical-align: middle;
+    color: #c9c9c9;
+}
