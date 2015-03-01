@@ -11,18 +11,23 @@ class RestDataService {
 
   public RestResponse get(String resource, String authorization, String cType) {
 
-    getRestBuilder().get(resource) {
-      auth authorization
-      contentType cType
+    def response
+    try {
+      response = getRestBuilder().get(resource) {
+        auth authorization
+        contentType cType
+      }
+    } catch (ConnectException ex) {
+      return null
+    } catch (Exception ex) {
+      return null
     }
+
+    response
   }
 
   protected RestBuilder getRestBuilder() {
-
-    if (!restBuilder) {
-      restBuilder = new RestBuilder()
-    }
-
+    if (!restBuilder) { restBuilder = new RestBuilder() }
     restBuilder
   }
 

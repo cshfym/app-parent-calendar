@@ -1,4 +1,4 @@
-package com.parentcalendar.services.data
+package com.parentcalendar.services.db
 
 
 public interface IDataService {

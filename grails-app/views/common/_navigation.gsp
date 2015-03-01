@@ -20,6 +20,7 @@
                     <sec:ifAllGranted roles="ROLE_ADMIN">
                         <li><a href="admin">Admin</a></li>
                     </sec:ifAllGranted>
+                    <!--
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
                         <ul class="dropdown-menu" role="menu">
@@ -32,6 +33,7 @@
                             <li><a href="#">One more separated link</a></li>
                         </ul>
                     </li>
+                    -->
                 </ul>
                 <form class="navbar-form navbar-left" role="search">
                     <div class="form-group">

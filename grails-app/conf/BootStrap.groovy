@@ -17,9 +17,11 @@ class BootStrap {
 
       //def adminRole = Role.find { authority == "ROLE_ADMIN" }
 
+        /*
       def testUser = User.find { username == "test_1" }
       testUser.setPassword("test_1")
       testUser.save(flush: true)
+          */
 
       // UserRole.create(testUser,adminRole,true)
     }

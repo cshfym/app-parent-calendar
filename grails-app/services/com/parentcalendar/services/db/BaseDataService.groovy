@@ -1,8 +1,9 @@
-package com.parentcalendar.services.data
+package com.parentcalendar.services.db
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.parentcalendar.services.cache.RedisCacheService
+import com.parentcalendar.services.db.IDataService
 import com.parentcalendar.services.rest.RestDataService
 import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,6 @@ abstract class BaseDataService implements IDataService {
 
     public <T> List<T> getAll(Type type, Type listType) {
 
-        // TODO Performance on this?
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data = []
@@ -37,7 +37,6 @@ abstract class BaseDataService implements IDataService {
             return data
         }
 
-
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.authentication.token as String,
@@ -45,7 +44,6 @@ abstract class BaseDataService implements IDataService {
 
         if (response?.status == 200) {
             response?.json.each {
-                // def obj = gson.fromJson(it.toString(), T.class)
                 def obj = gson.fromJson(it.toString(), type)
                 data << obj
             }
@@ -54,5 +52,37 @@ abstract class BaseDataService implements IDataService {
         cacheService.setCache(endpoint, gson.toJson(data, List.class), TTL)
 
         data
+    }
+
+    public Object getById(Type type) {
+
+        gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
+
+        def data
+
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+
+        def cachedData = cacheService.getCache(endpoint)
+        if (cachedData) {
+            data = gson.fromJson(cachedData, type);
+            return data
+        }
+
+        def response = restDataService.get(
+                endpoint as String,
+                grailsApplication.config.authentication.token as String,
+                grailsApplication.config.calendarData.contentType as String) as RestResponse
+
+        if (response?.status == 200) {
+            response?.json.each {
+                def obj = gson.fromJson(it.toString(), type)
+                data << obj
+            }
+        }
+
+        cacheService.setCache(endpoint, gson.toJson(data, type), TTL)
+
+        data
+
     }
 }

@@ -2,6 +2,7 @@ package com.parentcalendar.services.data
 
 import com.google.gson.reflect.TypeToken
 import com.parentcalendar.domain.core.CoreUser
+import com.parentcalendar.services.db.BaseDataService
 import grails.transaction.Transactional
 import org.apache.commons.logging.LogFactory
 

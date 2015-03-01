@@ -8,9 +8,12 @@ class Calendar {
     boolean active
     Date createDate
     Date updateDate
+    String description
+    List<CalendarEvent> events
 
     @Override
     public String toString() {
-        "Calendar: [ id: $id, user: $user, active: $active, createDate: $createDate, updateDate: $updateDate ]"
+        "Calendar: [ id: $id, user: $user, active: $active, createDate: $createDate, updateDate: $updateDate," +
+                "description: $description, events: $events ]"
     }
 }
