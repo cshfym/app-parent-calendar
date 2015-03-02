@@ -65,6 +65,19 @@ class RedisCacheService {
     data
   }
 
+  public void flushCache(String key) {
+
+      Jedis jedis = getPool()?.getResource()
+
+      if (!jedis || !key) {
+          return // Caching not available.
+      }
+
+      jedis.del(key)
+      log.info("Cache flushed for key $key")
+      getPool().returnResource(jedis)
+
+  }
   protected JedisPool getPool() {
     if (!pool) {
       initializePool()

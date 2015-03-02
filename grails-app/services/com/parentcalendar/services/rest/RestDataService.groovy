@@ -18,9 +18,27 @@ class RestDataService {
         contentType cType
       }
     } catch (ConnectException ex) {
-      return null
+      return null //TODO Implement
     } catch (Exception ex) {
-      return null
+        return null //TODO Implement
+    }
+
+    response
+  }
+
+  public RestResponse save(String verb, String resource, String authorization, String cType, String payload) {
+
+    def response
+    try {
+      response = getRestBuilder()."${verb}"(resource) {
+          auth authorization
+          contentType cType
+          json payload
+      }
+    }catch (ConnectException ex) {
+        return null //TODO Implement
+    } catch (Exception ex) {
+        return null //TODO Implement
     }
 
     response

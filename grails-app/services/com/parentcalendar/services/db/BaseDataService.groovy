@@ -47,6 +47,8 @@ abstract class BaseDataService implements IDataService {
                 def obj = gson.fromJson(it.toString(), type)
                 data << obj
             }
+        } else {
+            // TODO Implement
         }
 
         cacheService.setCache(endpoint, gson.toJson(data, List.class), TTL)
@@ -54,13 +56,37 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public Object getById(Type type) {
+    public Object create(Type type, Object obj) {
+
+        def returnObj
+
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+
+        String payload = gson.toJson(obj, type)
+
+        def response = restDataService.save(
+                "post",
+                endpoint as String,
+                grailsApplication.config.authentication.token as String,
+                grailsApplication.config.calendarData.contentType as String,
+                payload) as RestResponse
+
+        if (response?.status == 201) {
+          returnObj = gson.fromJson(response.json.toString(), type)
+        }
+
+        flushCache()
+
+        returnObj
+    }
+
+    public Object getById(Type type, Long id) {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data
 
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+        def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
         def cachedData = cacheService.getCache(endpoint)
         if (cachedData) {
@@ -74,15 +100,17 @@ abstract class BaseDataService implements IDataService {
                 grailsApplication.config.calendarData.contentType as String) as RestResponse
 
         if (response?.status == 200) {
-            response?.json.each {
-                def obj = gson.fromJson(it.toString(), type)
-                data << obj
-            }
+            data = gson.fromJson(response?.json.toString(), type)
         }
 
         cacheService.setCache(endpoint, gson.toJson(data, type), TTL)
 
         data
-
     }
+
+    private void flushCache() {
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+        cacheService.flushCache(endpoint)
+    }
+
 }

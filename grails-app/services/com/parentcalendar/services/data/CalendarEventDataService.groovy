@@ -15,10 +15,8 @@ class CalendarEventDataService extends BaseDataService {
 
     private static final log = LogFactory.getLog(this)
 
-    private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
-
     CalendarEvent getCalendarEventById(Long id) {
-        super.get(CalendarEvent.class, typeToken)
+        super.getById(CalendarEvent.class, id)
     }
 
     def getTTL() { 30 }

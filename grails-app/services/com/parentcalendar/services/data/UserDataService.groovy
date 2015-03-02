@@ -19,6 +19,15 @@ class UserDataService extends BaseDataService {
     super.getAll(CoreUser.class, typeToken)
   }
 
+  CoreUser getUser(Long id) {
+    super.getById(id)
+  }
+
+  void flushCache() {
+    def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+    super.cacheService.flushCache(endpoint)
+  }
+
   def getTTL() { 30 }
   def getDataPath() { "/user" }
 

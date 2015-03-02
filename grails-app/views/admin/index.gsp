@@ -10,7 +10,9 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Parent Calendar :: Admin</title>
+  <title>Parent Calendar Admin</title>
+
+  <g:javascript src="admin.js" />
 
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -24,22 +26,20 @@
 <body>
 
     <div id="wrapper">
-      <table class="table table-striped table-hover">
-        <thead><td>Users</td></thead>
-        <g:each in="${users}" var="user">
-          <tr>
-            <td>${user}</td>
-          </tr>
-        </g:each>
-      </table>
-      <table class="table table-striped table-hover">
-        <thead><td>Calendars</td></thead>
-        <g:each in="${calendars}" var="calendar">
-            <tr>
-                <td>${calendar}</td>
-            </tr>
-        </g:each>
-      </table>
+        <g:form controller="admin">
+
+            <div class="well">
+                <a href="#" class="btn btn-success" onclick="createUser();">Create User</a>
+                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#createCalendarModal">Create Calendar</a>
+            </div>
+
+            <hr />
+            <g:render template="adminUserList" />
+            <hr />
+            <g:render template="adminCalendarList" />
+            <hr />
+            <g:render template="adminCreateCalendarDialog" />
+       </g:form>
     </div>
     <!-- /#wrapper -->
 

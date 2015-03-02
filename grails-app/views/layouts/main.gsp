@@ -31,6 +31,5 @@
 
 		<r:layoutResources />
 
-        <g:render template="/common/footer" />
 	</body>
 </html>
