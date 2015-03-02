@@ -40,6 +40,10 @@ class CalendarDataService extends BaseDataService {
         super.create(Calendar.class, cal)
     }
 
+    void deleteCalendar(Long calendarId) {
+        super.delete(calendarId)
+    }
+
     def getTTL() { 30 }
     def getDataPath() { "/calendar" }
 }

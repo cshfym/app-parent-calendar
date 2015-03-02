@@ -44,6 +44,23 @@ class RestDataService {
     response
   }
 
+    public RestResponse delete(String resource, String authorization, String cType) {
+
+        def response
+        try {
+            response = getRestBuilder().delete(resource) {
+                auth authorization
+                contentType cType
+            }
+        }catch (ConnectException ex) {
+            return null //TODO Implement me...
+        } catch (Exception ex) {
+            return null //TODO Implement me...
+        }
+
+        response
+    }
+
   protected RestBuilder getRestBuilder() {
     if (!restBuilder) { restBuilder = new RestBuilder() }
     restBuilder

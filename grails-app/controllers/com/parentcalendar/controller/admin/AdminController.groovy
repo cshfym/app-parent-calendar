@@ -38,14 +38,13 @@ class AdminController {
     }
 
     def createCalendarForUser = {
-
         calendarDataService.createCalendar(Long.parseLong(params.userId), params.description)
-
         render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars() ])
     }
 
-    def getRandomString(int len) {
-        RandomStringUtils.random(len, (("a".."z") + ("0".."9")).join().toCharArray())
+    def deleteCalendar = {
+        calendarDataService.deleteCalendar(Long.parseLong(params.calendarId))
+        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars() ])
     }
 
     def deleteUser = {
@@ -57,6 +56,10 @@ class AdminController {
         userDataService.flushCache()
 
         render (template: "adminUserList", model: [ users: userDataService.getAllUsers() ])
+    }
 
+    // TODO Move to utils class.
+    def getRandomString(int len) {
+        RandomStringUtils.random(len, (("a".."z") + ("0".."9")).join().toCharArray())
     }
 }

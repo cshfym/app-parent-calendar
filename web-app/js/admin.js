@@ -60,6 +60,30 @@ function createCalendarForSelectedUser() {
     $("#createCalendarModal").modal("hide");
 }
 
+function deleteCalendar(id) {
+
+    if (!confirm("Delete calendar, are you sure?")) {
+        return false;
+    }
+
+    var link = "/app-parent-calendar/admin/deleteCalendar";
+    var parameters = { calendarId: id };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-list-wrapper").html(data);
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
+
+}
+
 function deleteUser(id) {
 
     if (!confirm("Delete user, are you sure?")) {

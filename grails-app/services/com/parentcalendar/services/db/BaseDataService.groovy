@@ -101,11 +101,29 @@ abstract class BaseDataService implements IDataService {
 
         if (response?.status == 200) {
             data = gson.fromJson(response?.json.toString(), type)
+        } else {
+            // TODO Implement me...
         }
 
         cacheService.setCache(endpoint, gson.toJson(data, type), TTL)
 
         data
+    }
+
+    public void delete(Long id) {
+
+        def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
+
+        def response = restDataService.delete(
+                endpoint as String,
+                grailsApplication.config.authentication.token as String,
+                grailsApplication.config.calendarData.contentType as String) as RestResponse
+
+        if (response?.status == 200) {
+            flushCache()
+        } else {
+            // TODO Implement me... "Could not delete"
+        }
     }
 
     private void flushCache() {
