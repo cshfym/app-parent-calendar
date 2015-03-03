@@ -2,6 +2,7 @@ package com.parentcalendar.services.db
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.cache.RedisCacheService
 import com.parentcalendar.services.db.IDataService
 import com.parentcalendar.services.rest.RestDataService

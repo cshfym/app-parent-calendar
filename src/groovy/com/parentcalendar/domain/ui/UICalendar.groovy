@@ -1,7 +1,5 @@
 package com.parentcalendar.domain.ui
 
-import org.joda.time.DateTime
-
 import java.text.SimpleDateFormat
 
 /**
