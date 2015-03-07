@@ -1,19 +1,15 @@
 package com.parentcalendar.controller
 
-import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.services.data.CalendarDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-import org.springframework.security.core.Authentication
-import org.springframework.security.core.context.SecurityContextHolder
 
 import java.text.SimpleDateFormat
 
 @Secured(['ROLE_USER'])
-class CalendarController {
+class CalendarController extends BaseController {
 
   private static final log = LogFactory.getLog(this)
 
@@ -26,7 +22,14 @@ class CalendarController {
 
     uiCalendar = new UICalendar()
 
-    [ calendar: uiCalendar, allCalendars: service.getAllCalendars(), today: new Date()]
+    def allCalendars = []
+    try {
+      allCalendars = service.getAllCalendars()
+    } catch (Exception ex) {
+      println ex
+    }
+
+    [ calendar: uiCalendar, allCalendars: allCalendars, today: new Date() ]
   }
 
   def changeCalendarMonth = {

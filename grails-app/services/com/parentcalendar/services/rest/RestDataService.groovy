@@ -1,41 +1,46 @@
 package com.parentcalendar.services.rest
 
+import com.parentcalendar.services.security.UserAuthenticationService
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
+import org.springframework.beans.factory.annotation.Autowired
 
 @Transactional
 class RestDataService {
 
+  @Autowired
+  UserAuthenticationService authenticationService
+
   private static RestBuilder restBuilder
 
-  public RestResponse get(String resource, String authorization, String cType) {
+  public RestResponse get(String resource, String cType, String userToken) {
 
     def response
     try {
       response = getRestBuilder().get(resource) {
-        auth authorization
+        auth userToken
         contentType cType
       }
     } catch (ConnectException ex) {
       return null //TODO Implement
     } catch (Exception ex) {
-        return null //TODO Implement
+      return null //TODO Implement
     }
 
     response
   }
 
-  public RestResponse save(String verb, String resource, String authorization, String cType, String payload) {
+  public RestResponse post(String resource, String cType, String payload, String userToken) {
 
     def response
     try {
-      response = getRestBuilder()."${verb}"(resource) {
-          auth authorization
-          contentType cType
-          json payload
+      response = getRestBuilder().post(resource) {
+        auth userToken
+        contentType cType
+        json payload
       }
-    }catch (ConnectException ex) {
+    } catch (ConnectException ex) {
         return null //TODO Implement
     } catch (Exception ex) {
         return null //TODO Implement
@@ -44,26 +49,43 @@ class RestDataService {
     response
   }
 
-    public RestResponse delete(String resource, String authorization, String cType) {
+  public RestResponse put(String resource, String cType, String payload, String userToken) {
 
-        def response
-        try {
-            response = getRestBuilder().delete(resource) {
-                auth authorization
-                contentType cType
-            }
-        }catch (ConnectException ex) {
-            return null //TODO Implement me...
-        } catch (Exception ex) {
-            return null //TODO Implement me...
-        }
-
-        response
+    def response
+    try {
+      response = getRestBuilder().put(resource) {
+        auth userToken
+        contentType cType
+        json payload
+      }
+    } catch (ConnectException ex) {
+      return null //TODO Implement
+    } catch (Exception ex) {
+      return null //TODO Implement
     }
+
+    response
+  }
+
+  public RestResponse delete(String resource, String cType, String userToken) {
+
+    def response
+    try {
+      response = getRestBuilder().delete(resource) {
+        auth userToken
+        contentType cType
+      }
+    } catch (ConnectException ex) {
+      return null //TODO Implement me...
+    } catch (Exception ex) {
+      return null //TODO Implement me...
+    }
+
+    response
+  }
 
   protected RestBuilder getRestBuilder() {
     if (!restBuilder) { restBuilder = new RestBuilder() }
     restBuilder
   }
-
 }

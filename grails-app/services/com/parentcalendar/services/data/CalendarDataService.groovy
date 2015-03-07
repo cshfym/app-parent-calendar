@@ -49,7 +49,7 @@ class CalendarDataService extends BaseDataService {
         super.delete(calendarId)
     }
 
-    def getAuthenticationToken() { }
     def getTTL() { 30 }
     def getDataPath() { "/calendar" }
+    String getUserToken() { userAuthenticationService.userToken }
 }

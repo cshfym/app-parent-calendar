@@ -18,10 +18,14 @@ class AdminController {
 
     def index() {
 
-        [
-            users: userDataService.getAllUsers(),
-            calendars: calendarDataService.getAllCalendars()
-        ]
+        def allCalendars = []
+        try {
+            allCalendars = calendarDataService.getAllCalendars()
+        } catch (Exception ex) {
+            println ex
+        }
+
+        [users: userDataService.getAllUsers(), calendars: allCalendars]
     }
 
     def createUser = {

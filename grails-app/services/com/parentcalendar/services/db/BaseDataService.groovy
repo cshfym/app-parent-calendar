@@ -2,6 +2,8 @@ package com.parentcalendar.services.db
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.parentcalendar.domain.exception.DataAuthenticationException
+import com.parentcalendar.domain.exception.GenericDataException
 import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.cache.RedisCacheService
 import com.parentcalendar.services.db.IDataService
@@ -24,7 +26,7 @@ abstract class BaseDataService implements IDataService {
 
     Gson gson
 
-    public <T> List<T> getAll(Type type, Type listType) {
+    public <T> List<T> getAll(Type type, Type listType) throws DataAuthenticationException {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -40,24 +42,34 @@ abstract class BaseDataService implements IDataService {
 
         def response = restDataService.get(
                 endpoint as String,
-                grailsApplication.config.authentication.token as String,
-                grailsApplication.config.calendarData.contentType as String) as RestResponse
+                grailsApplication.config.calendarData.contentType as String,
+                userToken) as RestResponse
 
-        if (response?.status == 200) {
-            response?.json.each {
-                def obj = gson.fromJson(it.toString(), type)
-                data << obj
-            }
-        } else {
-            // TODO Implement
+        switch (response?.status) {
+          case 200:
+              response?.json.each {
+                  def obj = gson.fromJson(it.toString(), type)
+                  data << obj
+              }
+              break
+          case 401:
+              def msg = "Authentication failed on REST getAll() at $endpoint"
+              log.error msg
+              throw new DataAuthenticationException(msg)
+          default:
+              def msg = "Invalid response code returned from REST getAll at [$endpoint] with response: [$response]"
+              log.error msg
+              throw new GenericDataException(msg)
         }
 
-        cacheService.setCache(endpoint, gson.toJson(data, List.class), TTL)
+        if (data && !data.isEmpty()) {
+          cacheService.setCache(endpoint, gson.toJson(data, List.class), TTL)
+        }
 
         data
     }
 
-    public Object create(Type type, Object obj) {
+    public Object create(Type type, Object obj) throws DataAuthenticationException  {
 
         def returnObj
 
@@ -65,12 +77,11 @@ abstract class BaseDataService implements IDataService {
 
         String payload = gson.toJson(obj, type)
 
-        def response = restDataService.save(
-                "post",
+        def response = restDataService.post(
                 endpoint as String,
-                grailsApplication.config.authentication.token as String,
                 grailsApplication.config.calendarData.contentType as String,
-                payload) as RestResponse
+                payload,
+                userToken) as RestResponse
 
         if (response?.status == 201) {
           returnObj = gson.fromJson(response.json.toString(), type)
@@ -81,7 +92,7 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id) {
+    public Object getById(Type type, Long id) throws DataAuthenticationException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -97,8 +108,8 @@ abstract class BaseDataService implements IDataService {
 
         def response = restDataService.get(
                 endpoint as String,
-                grailsApplication.config.authentication.token as String,
-                grailsApplication.config.calendarData.contentType as String) as RestResponse
+                grailsApplication.config.calendarData.contentType as String,
+                userToken) as RestResponse
 
         if (response?.status == 200) {
             data = gson.fromJson(response?.json.toString(), type)
@@ -111,14 +122,14 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public void delete(Long id) {
+    public void delete(Long id) throws DataAuthenticationException  {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
         def response = restDataService.delete(
                 endpoint as String,
-                grailsApplication.config.authentication.token as String,
-                grailsApplication.config.calendarData.contentType as String) as RestResponse
+                grailsApplication.config.calendarData.contentType as String,
+                userToken) as RestResponse
 
         if (response?.status == 200) {
             flushCache()
