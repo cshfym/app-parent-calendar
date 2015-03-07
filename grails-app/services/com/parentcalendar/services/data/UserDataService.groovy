@@ -21,7 +21,11 @@ class UserDataService extends BaseDataService {
   private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
 
   List<CoreUser> getAllUsers() {
-    super.getAll(CoreUser.class, typeToken)
+    try {
+      super.getAll(CoreUser.class, typeToken, true)
+    } catch (Exception ex) {
+      throw ex
+    }
   }
 
   CoreUser getUser(Long id) {

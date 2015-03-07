@@ -22,14 +22,15 @@ class CalendarController extends BaseController {
 
     uiCalendar = new UICalendar()
 
-    def allCalendars = []
+    def calendars = []
     try {
-      allCalendars = service.getAllCalendars()
+        calendars = service.allCalendarsByUser()
     } catch (Exception ex) {
-      println ex
+      render view: "calendar", model: [exceptionMessage: ex.getMessage() + ", " + ex.getCause()]
+      return
     }
 
-    [ calendar: uiCalendar, allCalendars: allCalendars, today: new Date() ]
+    [ calendar: uiCalendar, userCalendars: calendars, today: new Date() ]
   }
 
   def changeCalendarMonth = {

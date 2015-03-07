@@ -1,7 +1,7 @@
 package com.parentcalendar.domain.exception
 
 
-class GenericDataException extends Throwable {
+class GenericDataException extends Exception {
 
     String message
 

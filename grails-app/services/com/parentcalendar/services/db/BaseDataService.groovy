@@ -26,7 +26,7 @@ abstract class BaseDataService implements IDataService {
 
     Gson gson
 
-    public <T> List<T> getAll(Type type, Type listType) throws DataAuthenticationException {
+    public <T> List<T> getAll(Type type, Type listType, boolean isGlobal = false) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -43,8 +43,11 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                userToken) as RestResponse
+                userToken,
+                isGlobal) as RestResponse
 
+        throw new DataAuthenticationException("Dummy exception.")
+        /*
         switch (response?.status) {
           case 200:
               response?.json.each {
@@ -67,9 +70,10 @@ abstract class BaseDataService implements IDataService {
         }
 
         data
+        */
     }
 
-    public Object create(Type type, Object obj) throws DataAuthenticationException  {
+    public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException  {
 
         def returnObj
 
@@ -92,7 +96,7 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id) throws DataAuthenticationException  {
+    public Object getById(Type type, Long id) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -122,7 +126,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public void delete(Long id) throws DataAuthenticationException  {
+    public void delete(Long id) throws DataAuthenticationException, GenericDataException  {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 

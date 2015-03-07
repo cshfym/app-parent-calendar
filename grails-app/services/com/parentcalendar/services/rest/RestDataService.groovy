@@ -14,13 +14,14 @@ class RestDataService {
 
   private static RestBuilder restBuilder
 
-  public RestResponse get(String resource, String cType, String userToken) {
+  public RestResponse get(String resource, String cType, String userToken, boolean isGlobal = false) {
 
     def response
     try {
       response = getRestBuilder().get(resource) {
         auth userToken
         contentType cType
+        header "X-Auth-Global-Data", isGlobal.toString()
       }
     } catch (ConnectException ex) {
       return null //TODO Implement

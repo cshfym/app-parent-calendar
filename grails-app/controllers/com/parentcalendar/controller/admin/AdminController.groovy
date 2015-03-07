@@ -4,6 +4,7 @@ import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.data.CalendarDataService
 import com.parentcalendar.services.data.UserDataService
 import org.apache.commons.lang.RandomStringUtils
+import org.apache.commons.lang.exception.ExceptionUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
 
@@ -20,12 +21,28 @@ class AdminController {
 
         def allCalendars = []
         try {
-            allCalendars = calendarDataService.getAllCalendars()
+            allCalendars = calendarDataService.getAllCalendars(true)
         } catch (Exception ex) {
-            println ex
+            handleException(ex, ex.getMessage())
+            return
         }
 
-        [users: userDataService.getAllUsers(), calendars: allCalendars]
+        def allUsers = []
+        try {
+            allUsers = userDataService.getAllUsers()
+        } catch (Exception ex) {
+            handleException(ex, ex.getMessage())
+            return
+        }
+
+        [users: allUsers, calendars: allCalendars]
+    }
+
+    private void handleException(Exception e, String message) {
+        flash.message = message
+        String eMessage = ExceptionUtils.getRootCauseMessage(e)
+        log.error eMessage, e
+        redirect(action: "index")
     }
 
     def createUser = {
@@ -43,12 +60,12 @@ class AdminController {
 
     def createCalendarForUser = {
         calendarDataService.createCalendar(Long.parseLong(params.userId), params.description)
-        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars() ])
+        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(true) ])
     }
 
     def deleteCalendar = {
         calendarDataService.deleteCalendar(Long.parseLong(params.calendarId))
-        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars() ])
+        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(true) ])
     }
 
     def deleteUser = {

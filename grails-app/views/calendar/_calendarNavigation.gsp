@@ -36,9 +36,9 @@
             <a href="#" class="btn btn-sm btn-primary">Default Calendar</a>
             <a href="#" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
             <ul class="dropdown-menu">
-                <li><a href="#">Calendar #2</a></li>
-                <li><a href="#">Calendar #3</a></li>
-                <li><a href="#">Calendar #4</a></li>
+                <g:each in="${userCalendars}" var="userDefinedCalendar">
+                    <li><a href="#">${userDefinedCalendar.description}</a></li>
+                </g:each>
                 <!-- <li class="divider"></li>
                 <li><a href="#">Separated link</a></li> -->
             </ul>

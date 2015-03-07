@@ -1,7 +1,7 @@
 package com.parentcalendar.domain.exception
 
 
-class DataAuthenticationException extends Throwable {
+class DataAuthenticationException extends Exception {
 
     String message
 

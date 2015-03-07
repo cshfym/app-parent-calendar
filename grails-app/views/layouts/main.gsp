@@ -27,6 +27,8 @@
 	<body>
         <g:render template="/common/navigation" />
 
+        <g:render template="/common/errors" />
+
 		<g:layoutBody />
 
 		<r:layoutResources />
