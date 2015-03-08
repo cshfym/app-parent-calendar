@@ -26,7 +26,7 @@ abstract class BaseDataService implements IDataService {
 
     Gson gson
 
-    public <T> List<T> getAll(Type type, Type listType, boolean isGlobal = false) throws DataAuthenticationException, GenericDataException  {
+    public <T> List<T> getAll(Type type, Type listType, boolean allUsers = false) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -44,10 +44,8 @@ abstract class BaseDataService implements IDataService {
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
                 userToken,
-                isGlobal) as RestResponse
+                allUsers) as RestResponse
 
-        throw new DataAuthenticationException("Dummy exception.")
-        /*
         switch (response?.status) {
           case 200:
               response?.json.each {
@@ -60,7 +58,7 @@ abstract class BaseDataService implements IDataService {
               log.error msg
               throw new DataAuthenticationException(msg)
           default:
-              def msg = "Invalid response code returned from REST getAll at [$endpoint] with response: [$response]"
+              def msg = "Invalid response code returned from REST getAll at [$endpoint] with response: [$response.status]"
               log.error msg
               throw new GenericDataException(msg)
         }
@@ -70,7 +68,6 @@ abstract class BaseDataService implements IDataService {
         }
 
         data
-        */
     }
 
     public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException  {

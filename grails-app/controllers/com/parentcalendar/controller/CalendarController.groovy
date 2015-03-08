@@ -22,13 +22,7 @@ class CalendarController extends BaseController {
 
     uiCalendar = new UICalendar()
 
-    def calendars = []
-    try {
-        calendars = service.allCalendarsByUser()
-    } catch (Exception ex) {
-      render view: "calendar", model: [exceptionMessage: ex.getMessage() + ", " + ex.getCause()]
-      return
-    }
+    def calendars = service.getAllCalendars(false)
 
     [ calendar: uiCalendar, userCalendars: calendars, today: new Date() ]
   }

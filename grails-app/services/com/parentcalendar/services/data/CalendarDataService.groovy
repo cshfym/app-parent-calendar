@@ -26,9 +26,9 @@ class CalendarDataService extends BaseDataService {
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
-    List<Calendar> getAllCalendars(boolean isGlobal) {
+    List<Calendar> getAllCalendars(boolean allUsers) {
       try {
-        super.getAll(Calendar.class, typeToken, isGlobal)
+        super.getAll(Calendar.class, typeToken, allUsers)
       } catch (Exception ex) {
         throw ex
       }
