@@ -13,9 +13,6 @@ import java.lang.reflect.Type
 @Transactional
 class UserDataService extends BaseDataService {
 
-  @Autowired
-  UserAuthenticationService userAuthenticationService
-
   private static final log = LogFactory.getLog(this)
 
   private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
@@ -39,6 +36,18 @@ class UserDataService extends BaseDataService {
 
   def getTTL() { 30 }
   def getDataPath() { "/user" }
-  String getUserToken() { userAuthenticationService.userToken }
+  String getUserToken() { userTokenService.userTokenStringFromSession }
 
+    String getCacheKey(String method) {
+        new StringBuffer()
+                .append("USER_")
+                .append(userAuthenticationService.userId)
+                .append("|")
+                .append(grailsApplication.config.calendarData.host)
+                .append(dataPath)
+                .append("|")
+                .append(method)
+                .encodeAsBase64()
+                .toString()
+    }
 }

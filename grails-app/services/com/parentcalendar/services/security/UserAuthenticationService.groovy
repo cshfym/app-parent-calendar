@@ -1,5 +1,6 @@
 package com.parentcalendar.services.security
 
+import com.parentcalendar.domain.security.User
 import grails.plugin.springsecurity.authentication.encoding.BCryptPasswordEncoder
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +20,11 @@ class UserAuthenticationService {
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder
 
-    public String getUserToken() {
+    /**
+     * Returns a unique user token derived from user ID, session ID, and system token value
+     * @return String as unique user token.
+     */
+    public String getUserTokenString() {
 
       if (!SecurityContextHolder.context.authentication?.authenticated) { return null }
 
@@ -36,12 +41,25 @@ class UserAuthenticationService {
     }
 
     /**
-     * Convenience method to return the currently authenticated user ID.
+     * Convenience method to return the User object from the currently authenticated user.
+     * @return
+     */
+    public User getUser() {
+      User.find { id == userId }
+    }
+
+    /**
+     * Convenience method to return the ID for the currently authenticated user.
      * @return Long
      */
     public Long getUserId() {
       if (!SecurityContextHolder.context.authentication?.principal) { return null }
       SecurityContextHolder.context.authentication.principal.id
+    }
+
+    public String getSessionId() {
+        if (!SecurityContextHolder.context.authentication?.details?.sessionId) { return null }
+        SecurityContextHolder.context.authentication?.details?.sessionId
     }
 
     /**

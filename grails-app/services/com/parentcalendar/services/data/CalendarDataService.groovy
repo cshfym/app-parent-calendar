@@ -19,9 +19,6 @@ class CalendarDataService extends BaseDataService {
     private static final log = LogFactory.getLog(this)
 
     @Autowired
-    UserAuthenticationService userAuthenticationService
-
-    @Autowired
     UserDataService userDataService
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
@@ -55,5 +52,18 @@ class CalendarDataService extends BaseDataService {
 
     def getTTL() { 30 }
     def getDataPath() { "/calendar" }
-    String getUserToken() { userAuthenticationService.userToken }
+    String getUserToken() { userTokenService.userTokenStringFromSession  }
+
+    String getCacheKey(String method) {
+        new StringBuffer()
+                .append("USER_")
+                .append(userAuthenticationService.userId)
+                .append("|")
+                .append(grailsApplication.config.calendarData.host)
+                .append(dataPath)
+                .append("|")
+                .append(method)
+                .encodeAsBase64()
+                .toString()
+    }
 }

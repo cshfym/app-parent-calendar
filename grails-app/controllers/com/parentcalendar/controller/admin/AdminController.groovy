@@ -1,6 +1,9 @@
 package com.parentcalendar.controller.admin
 
+import com.parentcalendar.domain.enums.SecurityRoles
+import com.parentcalendar.domain.security.Role
 import com.parentcalendar.domain.security.User
+import com.parentcalendar.domain.security.UserRole
 import com.parentcalendar.services.data.CalendarDataService
 import com.parentcalendar.services.data.UserDataService
 import org.apache.commons.lang.RandomStringUtils
@@ -19,7 +22,7 @@ class AdminController {
 
     def index() {
 
-        def allCalendars = []
+        def allCalendars
         try {
             allCalendars = calendarDataService.getAllCalendars(true)
         } catch (Exception ex) {
@@ -27,7 +30,7 @@ class AdminController {
             return
         }
 
-        def allUsers = []
+        def allUsers
         try {
             allUsers = userDataService.getAllUsers()
         } catch (Exception ex) {
@@ -52,6 +55,11 @@ class AdminController {
         // GORM
         def user = new User(username: randomName, password: 'test', email: "${randomName}@email.com")
         user.save(flush: true)
+
+        // Attach a role.
+        def role = Role.find { authority == SecurityRoles.ROLE_USER.name }
+        def userRole = new UserRole(user: user, role: role)
+        userRole.save(flush: true)
 
         userDataService.flushCache()
 

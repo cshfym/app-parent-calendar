@@ -1,5 +1,6 @@
 package com.parentcalendar.services.rest
 
+import com.parentcalendar.domain.enums.Constants
 import com.parentcalendar.services.security.UserAuthenticationService
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
@@ -14,14 +15,14 @@ class RestDataService {
 
   private static RestBuilder restBuilder
 
-  public RestResponse get(String resource, String cType, String userToken, boolean isGlobal = false) {
+  public RestResponse get(String resource, String cType, String userToken, boolean allUsers = false) {
 
     def response
     try {
       response = getRestBuilder().get(resource) {
         auth userToken
         contentType cType
-        header "X-Auth-Global-Data", isGlobal.toString()
+        header Constants.X_AUTH_ALL_USERS.value, allUsers.toString()
       }
     } catch (ConnectException ex) {
       return null //TODO Implement

@@ -2,21 +2,21 @@
 
     <div id="calendar-wrapper">
 
-        <input type="hidden" id="weekCount" value="${calendar.getVisibleWeekCount()}" />
+        <input type="hidden" id="weekCount" value="${pageModel.uiCalendar.getVisibleWeekCount()}" />
 
-        <g:render template="calendarNavigation" model="${calendar}" />
+        <g:render template="calendarNavigation" model="${pageModel.uiCalendar}" />
 
         <div>
             <table class="table-month-container">
                 <!-- Day of week header -->
                 <tr>
-                    <g:each in="${calendar.dayOfWeekList()}" var="dayName">
+                    <g:each in="${pageModel.uiCalendar.dayOfWeekList()}" var="dayName">
                         <td class="calendar-day-header">${dayName}</td>
                     </g:each>
                 </tr>
 
                 <tr>
-                    <g:set value="${calendar.getCurrentDateWeek()}" var="currentWeek" />
+                    <g:set value="${pageModel.uiCalendar.getCurrentDateWeek()}" var="currentWeek" />
                     <g:each in="${currentWeek.days}" var="day">
                         <td class="td-day-container">
                             <g:if test="${day.isToday()}">

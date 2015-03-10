@@ -1,6 +1,7 @@
 package com.parentcalendar.controller
 
 import com.parentcalendar.domain.ui.UICalendar
+import com.parentcalendar.domain.ui.page.CalendarModel
 import com.parentcalendar.services.data.CalendarDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,84 +17,61 @@ class CalendarController extends BaseController {
   @Autowired
   CalendarDataService service
 
-  UICalendar uiCalendar
+  CalendarModel model
 
   def index() {
 
-    uiCalendar = new UICalendar()
+    model = new CalendarModel()
 
-    def calendars = service.getAllCalendars(false)
+    model.uiCalendar = new UICalendar()
+    model.userCalendars = service.getAllCalendars(false)
 
-    [ calendar: uiCalendar, userCalendars: calendars, today: new Date() ]
+    [ pageModel: model ]
+  }
+
+  UICalendar getUICalendar() {
+    if (!model.uiCalendar) {
+      model.uiCalendar = new UICalendar()
+    }
+    model.uiCalendar
+  }
+
+  def changeCalendarYear = {
+
+    getUICalendar().changeYear(Integer.parseInt(params.adjust))
+    render (template: "monthView", model: [ pageModel: model ])
   }
 
   def changeCalendarMonth = {
 
-    if (uiCalendar) {
-      uiCalendar.changeMonth(Integer.parseInt(params.adjust))
-    } else {
-      uiCalendar = new UICalendar()
-    }
-
-    render (template: "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+    getUICalendar().changeMonth(Integer.parseInt(params.adjust))
+    render (template: "monthView", model: [ pageModel: model ])
   }
 
   def changeCalendarWeek = {
 
-    if (uiCalendar) {
-        uiCalendar.changeWeek(Integer.parseInt(params.adjust))
-    } else {
-        uiCalendar = new UICalendar()
-    }
-
-    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+    getUICalendar().changeWeek(Integer.parseInt(params.adjust))
+    render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
   }
 
   def changeCalendarToday = {
 
-    if (uiCalendar) {
-      uiCalendar.setToday()
-    } else {
-      uiCalendar = new UICalendar()
-    }
-
-    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+    getUICalendar().setToday()
+    render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
   }
 
   def selectCalendarDay = {
 
-    if (!uiCalendar) {
-      uiCalendar = new UICalendar()
-    }
-
     def newDate = new SimpleDateFormat("MM-dd-yyyy").parse(params.selectedDay)
-    uiCalendar.date = newDate
+    getUICalendar().date = newDate
+    model.uiCalendar.build()
 
-    uiCalendar.build()
-
-    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
-  }
-
-  def changeNextYear = {
-
-    if (uiCalendar) {
-      uiCalendar.changeNextYear()
-    } else {
-      uiCalendar = new UICalendar()
-    }
-
-    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
+    render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
   }
 
   def switchView = {
 
-    if (uiCalendar) {
-      uiCalendar.weekView = (params.viewType.toLowerCase() == "week") ? true : false
-    } else {
-      uiCalendar = new UICalendar()
-    }
-
-    render (template: (uiCalendar.weekView) ? "weekView" : "monthView", model: [ calendar: uiCalendar, today: new Date() ])
-
+    getUICalendar().weekView = (params.viewType.toLowerCase() == "week") ? true : false
+    render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
   }
 }

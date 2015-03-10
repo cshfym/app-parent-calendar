@@ -114,11 +114,11 @@ class UICalendar {
     build()
   }
 
-  public void changeNextYear() {
-    Calendar nextYear = Calendar.getInstance()
-    nextYear.setTime(this.date)
-    nextYear.add(Calendar.YEAR, 1)
-    this.date = nextYear.getTime()
+  public void changeYear(int value) {
+    Calendar year = Calendar.getInstance()
+    year.setTime(this.date)
+    year.add(Calendar.YEAR, value)
+    this.date = year.getTime()
 
     build()
   }

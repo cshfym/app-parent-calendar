@@ -27,6 +27,24 @@ function unHighlightToday(id) {
     $("#" + id).attr("class", "calendar-day-container today");
 }
 
+function changeCalendarYear(years) {
+    var link = "/app-parent-calendar/calendar/changeCalendarYear";
+    var parameters = { adjust: years };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarHeight();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
+}
 
 function changeCalendarMonth(days) {
   var link = "/app-parent-calendar/calendar/changeCalendarMonth";
@@ -102,25 +120,6 @@ function selectDay(id) {
         },
         complete: function() { }
     });
-}
-
-function changeNextYear() {
-  var link = "/app-parent-calendar/calendar/changeNextYear";
-  var parameters = { };
-  $.ajax({
-    type: "POST",
-    url: link,
-    dataType: 'html',
-    data: parameters,
-    success: function(data) {
-      $("#calendar-wrapper").html(data);
-      adjustCalendarHeight();
-    },
-    error: function(request, status, error) {
-      alert(error);
-    },
-    complete: function() { }
-  });
 }
 
 function switchView(view) {

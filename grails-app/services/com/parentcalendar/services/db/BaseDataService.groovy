@@ -8,6 +8,8 @@ import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.cache.RedisCacheService
 import com.parentcalendar.services.db.IDataService
 import com.parentcalendar.services.rest.RestDataService
+import com.parentcalendar.services.security.UserAuthenticationService
+import com.parentcalendar.services.security.UserTokenService
 import grails.plugins.rest.client.RestResponse
 import org.springframework.beans.factory.annotation.Autowired
 
@@ -19,22 +21,28 @@ abstract class BaseDataService implements IDataService {
     def grailsApplication
 
     @Autowired
+    UserAuthenticationService userAuthenticationService
+
+    @Autowired
     RestDataService restDataService
 
     @Autowired
     RedisCacheService cacheService
 
+    @Autowired
+    UserTokenService userTokenService
+
     Gson gson
 
-    public <T> List<T> getAll(Type type, Type listType, boolean allUsers = false) throws DataAuthenticationException, GenericDataException  {
+    public <T> List<T> getAll(Type type, Type listType, boolean allData = false) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data = []
-
+        def cacheKey = getCacheKey("getAll-" + String.valueOf(allData))
         def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
-        def cachedData = cacheService.getCache(endpoint)
+        def cachedData = cacheService.getCache(cacheKey)
         if (cachedData) {
             data = gson.fromJson(cachedData, listType);
             return data
@@ -44,7 +52,7 @@ abstract class BaseDataService implements IDataService {
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
                 userToken,
-                allUsers) as RestResponse
+                allData) as RestResponse
 
         switch (response?.status) {
           case 200:
@@ -64,7 +72,7 @@ abstract class BaseDataService implements IDataService {
         }
 
         if (data && !data.isEmpty()) {
-          cacheService.setCache(endpoint, gson.toJson(data, List.class), TTL)
+          cacheService.setCache(cacheKey, gson.toJson(data, List.class), TTL)
         }
 
         data
@@ -139,9 +147,9 @@ abstract class BaseDataService implements IDataService {
         }
     }
 
-    private void flushCache() {
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
-        cacheService.flushCache(endpoint)
+    void flushCache() {
+        cacheService.flushCache(getCacheKey())
     }
+
 
 }

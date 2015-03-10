@@ -2,19 +2,19 @@
 
     <div id="calendar-wrapper">
 
-      <input type="hidden" id="weekCount" value="${calendar.getVisibleWeekCount()}" />
+      <input type="hidden" id="weekCount" value="${pageModel.uiCalendar.getVisibleWeekCount()}" />
 
-      <g:render template="calendarNavigation" model="${calendar}" />
+      <g:render template="calendarNavigation" model="${pageModel.uiCalendar}" />
 
       <div>
         <table class="table-month-container">
           <!-- Day of week header -->
           <tr>
-            <g:each in="${calendar.dayOfWeekList()}" var="dayName">
+            <g:each in="${pageModel.uiCalendar.dayOfWeekList()}" var="dayName">
               <td class="calendar-day-header">${dayName}</td>
             </g:each>
           </tr>
-          <g:each in="${calendar.weeks}" var="week">
+          <g:each in="${pageModel.uiCalendar.weeks}" var="week">
             <tr>
               <g:each in="${week.days}" var="day">
                 <td class="td-day-container">

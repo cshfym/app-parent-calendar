@@ -34,8 +34,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-12">
-
-                        <g:if test="${calendar.weekView}">
+                        <g:if test="${pageModel.uiCalendar.weekView}">
                             <g:render template="weekView" />
                         </g:if>
                         <g:else>
