@@ -56,14 +56,11 @@ class CalendarDataService extends BaseDataService {
 
     String getCacheKey(String method) {
         new StringBuffer()
-                .append("USER_")
                 .append(userAuthenticationService.userId)
                 .append("|")
-                .append(grailsApplication.config.calendarData.host)
                 .append(dataPath)
                 .append("|")
                 .append(method)
-                .encodeAsBase64()
                 .toString()
     }
 }
