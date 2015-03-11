@@ -26,7 +26,7 @@
 <div id="wrapper">
 
     <div class="col-lg-10">
-        <h3>Application Exception<h3>
+        <h3>Application Exception</h3>
         <div class="alert alert-dismissible alert-danger">
             <button type="button" class="close" data-dismiss="alert">×</button>
             <h5>${exception}</h5>

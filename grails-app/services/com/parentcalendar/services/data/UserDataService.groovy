@@ -17,16 +17,20 @@ class UserDataService extends BaseDataService {
 
   private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
 
-  List<CoreUser> getAllUsers() {
+  List<CoreUser> getAllUsers(boolean noAuth = false) {
     try {
-      super.getAll(CoreUser.class, typeToken, true)
+      super.getAll(CoreUser.class, typeToken, true, noAuth)
     } catch (Exception ex) {
       throw ex
     }
   }
 
-  CoreUser getUser(Long id) {
-    super.getById(id)
+  CoreUser getById(Long id, boolean noAuth = false) {
+    super.getById(CoreUser.class, id, noAuth)
+  }
+
+  List<CoreUser> getBy(String column, String attribute, boolean noAuth = false) {
+    super.getBy(CoreUser.class, column, attribute, noAuth)
   }
 
   void flushCache() {

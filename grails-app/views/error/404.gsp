@@ -10,7 +10,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Parent Calendar - Error!</title>
+    <title>Parent Calendar - Not Found!</title>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -25,7 +25,13 @@
 
 <div id="wrapper">
 
-    404 - Whoops!
+    <div class="col-lg-10">
+        <h3>Application Exception</h3>
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <h5>Page not found!</h5>
+        </div>
+    </div>
 
 </div>
 <!-- /#wrapper -->

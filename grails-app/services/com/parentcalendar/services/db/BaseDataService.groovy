@@ -34,7 +34,18 @@ abstract class BaseDataService implements IDataService {
 
     Gson gson
 
-    public <T> List<T> getAll(Type type, Type listType, boolean allData = false) throws DataAuthenticationException, GenericDataException  {
+    /**
+     * Gets all entities for the specified type.
+     * @param type
+     * @param listType
+     * @param allData (Retrieve data irrespective of user
+     * @param noAuth (Use generic authorization token [non-user-specific])
+     * @return List<T>
+     * @throws DataAuthenticationException
+     * @throws GenericDataException
+     */
+    public <T> List<T> getAll(Type type, Type listType, boolean allData = false, boolean noAuth = false)
+        throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -51,8 +62,9 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                userToken,
-                allData) as RestResponse
+                (noAuth) ? grailsApplication.config.authentication.token : userToken,
+                allData,
+                noAuth) as RestResponse
 
         switch (response?.status) {
           case 200:
@@ -78,7 +90,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException  {
+    public Object create(Type type, Object obj, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
 
         def returnObj
 
@@ -90,10 +102,22 @@ abstract class BaseDataService implements IDataService {
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
                 payload,
-                userToken) as RestResponse
+                (noAuth) ? grailsApplication.config.authentication.token : userToken,
+                noAuth) as RestResponse
 
-        if (response?.status == 201) {
-          returnObj = gson.fromJson(response.json.toString(), type)
+        switch (response?.status) {
+            case 200:
+            case 201:
+                returnObj = gson.fromJson(response.json.toString(), type)
+                break
+            case 401:
+                def msg = "Authentication failed on REST create() at $endpoint"
+                log.error msg
+                throw new DataAuthenticationException(msg)
+            default:
+                def msg = "Invalid response code returned from REST create at [$endpoint] with response: [$response.status]"
+                log.error msg
+                throw new GenericDataException(msg)
         }
 
         flushCache()
@@ -101,15 +125,15 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id) throws DataAuthenticationException, GenericDataException  {
+    public Object getById(Type type, Long id, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data
-
+        def cacheKey = getCacheKey("getById")
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
-        def cachedData = cacheService.getCache(endpoint)
+        def cachedData = cacheService.getCache(cacheKey)
         if (cachedData) {
             data = gson.fromJson(cachedData, type);
             return data
@@ -118,32 +142,97 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                userToken) as RestResponse
+                (noAuth) ? grailsApplication.config.authentication.token : userToken,
+                noAuth) as RestResponse
 
-        if (response?.status == 200) {
-            data = gson.fromJson(response?.json.toString(), type)
-        } else {
-            // TODO Implement me...
+        switch (response?.status) {
+            case 200:
+                data = gson.fromJson(response?.json.toString(), type)
+                break
+            case 401:
+                def msg = "Authentication failed on REST getById() at $endpoint"
+                log.error msg
+                throw new DataAuthenticationException(msg)
+            default:
+                def msg = "Invalid response code returned from REST getById at [$endpoint] with response: [$response.status]"
+                log.error msg
+                throw new GenericDataException(msg)
         }
 
-        cacheService.setCache(endpoint, gson.toJson(data, type), TTL)
+        if (data) {
+            cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
+        }
 
         data
     }
 
-    public void delete(Long id) throws DataAuthenticationException, GenericDataException  {
+    public Object getBy(Type type, String col, Object val, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
+
+        gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
+
+        def data
+        // def cacheKey = getCacheKey("getBy/${col}/${val}")
+        def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${col}/${val}" as String
+
+        /* TODO Solve caching for getBy with noAuth.
+        def cachedData = cacheService.getCache(cacheKey)
+        if (cachedData) {
+            data = gson.fromJson(cachedData, type);
+            return data
+        }
+        */
+
+        def response = restDataService.get(
+                endpoint as String,
+                grailsApplication.config.calendarData.contentType as String,
+                (noAuth) ? grailsApplication.config.authentication.token : userToken,
+                noAuth) as RestResponse
+
+        switch (response?.status) {
+            case 200:
+                data = gson.fromJson(response?.json.toString(), type)
+                break
+            case 401:
+                def msg = "Authentication failed on REST getById() at $endpoint"
+                log.error msg
+                throw new DataAuthenticationException(msg)
+            default:
+                def msg = "Invalid response code returned from REST getById at [$endpoint] with response: [$response.status]"
+                log.error msg
+                throw new GenericDataException(msg)
+        }
+
+        /* TODO Solve caching for getBy with noAuth.
+        if (data) {
+            cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
+        }
+        */
+
+        data
+    }
+
+    public void delete(Long id, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
         def response = restDataService.delete(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                userToken) as RestResponse
+                (noAuth) ? grailsApplication.config.authentication.token : userToken,
+                noAuth) as RestResponse
 
-        if (response?.status == 200) {
-            flushCache()
-        } else {
-            // TODO Implement me... "Could not delete"
+        switch (response?.status) {
+            case 200:
+                flushCache()
+                break
+            case 401:
+                def msg = "Authentication failed on REST delete() at $endpoint"
+                log.error msg
+                throw new DataAuthenticationException(msg)
+            default:
+                def msg = "Invalid response code returned from REST delete at [$endpoint] with response: [$response.status]"
+                log.error msg
+                throw new GenericDataException(msg)
         }
     }
 

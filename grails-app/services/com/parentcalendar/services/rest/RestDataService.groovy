@@ -15,7 +15,7 @@ class RestDataService {
 
   private static RestBuilder restBuilder
 
-  public RestResponse get(String resource, String cType, String userToken, boolean allUsers = false) {
+  public RestResponse get(String resource, String cType, String userToken, boolean allUsers = false, boolean noAuth = false) {
 
     def response
     try {
@@ -23,6 +23,7 @@ class RestDataService {
         auth userToken
         contentType cType
         header Constants.X_AUTH_ALL_USERS.value, allUsers.toString()
+        header Constants.X_AUTH_NO_AUTH.value, noAuth.toString()
       }
     } catch (ConnectException ex) {
       return null //TODO Implement
@@ -33,13 +34,14 @@ class RestDataService {
     response
   }
 
-  public RestResponse post(String resource, String cType, String payload, String userToken) {
+  public RestResponse post(String resource, String cType, String payload, String userToken, boolean noAuth = false) {
 
     def response
     try {
       response = getRestBuilder().post(resource) {
         auth userToken
         contentType cType
+        header Constants.X_AUTH_NO_AUTH.value, noAuth.toString()
         json payload
       }
     } catch (ConnectException ex) {
@@ -51,13 +53,14 @@ class RestDataService {
     response
   }
 
-  public RestResponse put(String resource, String cType, String payload, String userToken) {
+  public RestResponse put(String resource, String cType, String payload, String userToken, boolean noAuth = false) {
 
     def response
     try {
       response = getRestBuilder().put(resource) {
         auth userToken
         contentType cType
+        header Constants.X_AUTH_NO_AUTH.value, noAuth.toString()
         json payload
       }
     } catch (ConnectException ex) {
@@ -69,13 +72,14 @@ class RestDataService {
     response
   }
 
-  public RestResponse delete(String resource, String cType, String userToken) {
+  public RestResponse delete(String resource, String cType, String userToken, boolean noAuth = false) {
 
     def response
     try {
       response = getRestBuilder().delete(resource) {
         auth userToken
         contentType cType
+        header Constants.X_AUTH_NO_AUTH.value, noAuth.toString()
       }
     } catch (ConnectException ex) {
       return null //TODO Implement me...

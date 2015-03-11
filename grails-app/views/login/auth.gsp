@@ -11,7 +11,7 @@
     <div class="panel panel-primary panel-login">
 
         <div class="panel-heading">
-            <h3 class="panel-title">Parent Calendar :: Login</h3>
+            <h3 class="panel-title">Parent Calendar Login</h3>
         </div>
 
         <div class="panel-body">
@@ -39,6 +39,11 @@
                         </div>
                     </div>
 
+                    <div class="form-group" style="margin-top: 25px;">
+                        <div class="col-lg-10 col-lg-offset-2" style="border: 1px solid #80808;">
+                            <g:link class="btn btn-link" controller="registration" action="index">Register</g:link>
+                        </div>
+                    </div>
                 </fieldset>
 
             </form>

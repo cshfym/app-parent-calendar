@@ -23,9 +23,9 @@ class CalendarDataService extends BaseDataService {
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
-    List<Calendar> getAllCalendars(boolean allUsers) {
+    List<Calendar> getAllCalendars(boolean allUsers, boolean noAuth = false) {
       try {
-        super.getAll(Calendar.class, typeToken, allUsers)
+        super.getAll(Calendar.class, typeToken, allUsers, noAuth)
       } catch (Exception ex) {
         throw ex
       }
@@ -46,8 +46,8 @@ class CalendarDataService extends BaseDataService {
         super.create(Calendar.class, cal)
     }
 
-    void deleteCalendar(Long calendarId) {
-        super.delete(calendarId)
+    void deleteCalendar(Long calendarId, boolean noAuth = false) {
+        super.delete(calendarId, noAuth)
     }
 
     def getTTL() { 30 }
