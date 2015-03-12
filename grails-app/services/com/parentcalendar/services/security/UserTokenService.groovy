@@ -1,7 +1,7 @@
 package com.parentcalendar.services.security
 
 import com.parentcalendar.domain.security.UserToken
-import com.parentcalendar.services.data.UserDataService
+import com.parentcalendar.services.data.CoreUserDataService
 import grails.transaction.Transactional
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +17,7 @@ class UserTokenService {
   def grailsApplication
 
   @Autowired
-  UserDataService userDataService
+  CoreUserDataService coreUserDataService
 
   @Autowired
   UserAuthenticationService authenticationService

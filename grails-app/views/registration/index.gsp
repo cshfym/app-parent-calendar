@@ -23,21 +23,21 @@
 
             <g:form class="form-horizontal" controller="registration" action="submitRegistration">
                 <fieldset>
-                    <div class="form-group">
+                    <div id="checkUsernameDiv" class="form-group">
                         <label for="username" class="col-lg-2 control-label">Username</label>
                         <div class="col-lg-4">
                             <input type="text" class="form-control" name="j_username" id="username"
-                                onblur="return checkUsername();"
-                            />
+                                onblur="return checkUsername();"/>
                         </div>
-                        <div id="checkUsernameResult">
-                        </div>
+                        <div id="checkUsernameErrorMessage" class="col-lg-5 validation-error"></div>
                     </div>
-                    <div class="form-group">
+                    <div id="checkEmailDiv" class="form-group">
                         <label for="email" class="col-lg-2 control-label">Email</label>
                         <div class="col-lg-4">
-                            <input type="text" class="form-control" name="email" id="email" />
+                            <input type="text" class="form-control" name="email" id="email"
+                                onblur="return checkEmail();" />
                         </div>
+                        <div id="checkEmailErrorMessage" class="col-lg-5 validation-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="password" class="col-lg-2 control-label">Password</label>
@@ -53,8 +53,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-lg-10 col-lg-offset-2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                            <g:link class="btn btn-link" controller="login" action="auth">Login</g:link>
+                            <button type="submit" class="btn btn-primary" onclick="return validateAllInputs();">Submit</button>
+                            <g:link id="btnSubmitRegistration" class="btn btn-link" controller="login" action="auth">Login</g:link>
                         </div>
                     </div>
 

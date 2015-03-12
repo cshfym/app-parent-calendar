@@ -39,18 +39,17 @@ abstract class BaseDataService implements IDataService {
      * @param type
      * @param listType
      * @param allData (Retrieve data irrespective of user
-     * @param noAuth (Use generic authorization token [non-user-specific])
      * @return List<T>
      * @throws DataAuthenticationException
      * @throws GenericDataException
      */
-    public <T> List<T> getAll(Type type, Type listType, boolean allData = false, boolean noAuth = false)
+    public <T> List<T> getAll(Type type, Type listType, boolean allUsers)
         throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data = []
-        def cacheKey = getCacheKey("getAll-" + String.valueOf(allData))
+        def cacheKey = getCacheKey("getAll-" + String.valueOf(allUsers))
         def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
         def cachedData = cacheService.getCache(cacheKey)
@@ -62,9 +61,7 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                (noAuth) ? grailsApplication.config.authentication.token : userToken,
-                allData,
-                noAuth) as RestResponse
+                allUsers) as RestResponse
 
         switch (response?.status) {
           case 200:
@@ -90,7 +87,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public Object create(Type type, Object obj, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
+    public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException  {
 
         def returnObj
 
@@ -101,9 +98,7 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.post(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                payload,
-                (noAuth) ? grailsApplication.config.authentication.token : userToken,
-                noAuth) as RestResponse
+                payload) as RestResponse
 
         switch (response?.status) {
             case 200:
@@ -125,7 +120,7 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
+    public Object getById(Type type, Long id) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -141,9 +136,7 @@ abstract class BaseDataService implements IDataService {
 
         def response = restDataService.get(
                 endpoint as String,
-                grailsApplication.config.calendarData.contentType as String,
-                (noAuth) ? grailsApplication.config.authentication.token : userToken,
-                noAuth) as RestResponse
+                grailsApplication.config.calendarData.contentType as String) as RestResponse
 
         switch (response?.status) {
             case 200:
@@ -166,7 +159,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public Object getBy(Type type, String col, Object val, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
+    public Object getBy(Type type, String col, Object val, boolean allUsers) throws DataAuthenticationException, GenericDataException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -174,19 +167,16 @@ abstract class BaseDataService implements IDataService {
         // def cacheKey = getCacheKey("getBy/${col}/${val}")
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${col}/${val}" as String
 
-        /* TODO Solve caching for getBy with noAuth.
         def cachedData = cacheService.getCache(cacheKey)
         if (cachedData) {
             data = gson.fromJson(cachedData, type);
             return data
         }
-        */
 
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                (noAuth) ? grailsApplication.config.authentication.token : userToken,
-                noAuth) as RestResponse
+                allUsers) as RestResponse
 
         switch (response?.status) {
             case 200:
@@ -202,24 +192,20 @@ abstract class BaseDataService implements IDataService {
                 throw new GenericDataException(msg)
         }
 
-        /* TODO Solve caching for getBy with noAuth.
         if (data) {
             cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
         }
-        */
 
         data
     }
 
-    public void delete(Long id, boolean noAuth = false) throws DataAuthenticationException, GenericDataException  {
+    public void delete(Long id) throws DataAuthenticationException, GenericDataException  {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
         def response = restDataService.delete(
                 endpoint as String,
-                grailsApplication.config.calendarData.contentType as String,
-                (noAuth) ? grailsApplication.config.authentication.token : userToken,
-                noAuth) as RestResponse
+                grailsApplication.config.calendarData.contentType as String) as RestResponse
 
         switch (response?.status) {
             case 200:

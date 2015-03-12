@@ -19,6 +19,7 @@
         <g:javascript src="jquery.js" />
         <g:javascript src="bootstrap.min.js" />
         <g:javascript src="application.js" />
+        <g:javascript src="validations.js" />
 
 		<g:layoutHead/>
 

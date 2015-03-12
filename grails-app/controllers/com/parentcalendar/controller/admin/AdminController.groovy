@@ -5,7 +5,7 @@ import com.parentcalendar.domain.security.Role
 import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.security.UserRole
 import com.parentcalendar.services.data.CalendarDataService
-import com.parentcalendar.services.data.UserDataService
+import com.parentcalendar.services.data.CoreUserDataService
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,7 @@ import org.springframework.security.access.annotation.Secured
 class AdminController {
 
     @Autowired
-    UserDataService userDataService
+    CoreUserDataService coreUserDataService
 
     @Autowired
     CalendarDataService calendarDataService
@@ -32,7 +32,7 @@ class AdminController {
 
         def allUsers
         try {
-            allUsers = userDataService.getAllUsers()
+            allUsers = coreUserDataService.getAllUsers()
         } catch (Exception ex) {
             handleException(ex, ex.getMessage())
             return
@@ -61,9 +61,9 @@ class AdminController {
         def userRole = new UserRole(user: user, role: role)
         userRole.save(flush: true)
 
-        userDataService.flushCache()
+        coreUserDataService.flushCache()
 
-        render (template: "adminUserList", model: [ users: userDataService.getAllUsers() ])
+        render (template: "adminUserList", model: [ users: coreUserDataService.getAllUsers() ])
     }
 
     def createCalendarForUser = {
@@ -82,9 +82,9 @@ class AdminController {
         def user = User.find { id == params.userId }
         user.delete(flush: true)
 
-        userDataService.flushCache()
+        coreUserDataService.flushCache()
 
-        render (template: "adminUserList", model: [ users: userDataService.getAllUsers() ])
+        render (template: "adminUserList", model: [ users: coreUserDataService.getAllUsers() ])
     }
 
     // TODO Move to utils class.

@@ -3,9 +3,7 @@ package com.parentcalendar.services.data
 import com.google.gson.reflect.TypeToken
 import com.parentcalendar.domain.core.Calendar
 import com.parentcalendar.domain.core.CoreUser
-import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.db.BaseDataService
-import com.parentcalendar.services.security.UserAuthenticationService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.transaction.annotation.Transactional
@@ -19,13 +17,13 @@ class CalendarDataService extends BaseDataService {
     private static final log = LogFactory.getLog(this)
 
     @Autowired
-    UserDataService userDataService
+    CoreUserDataService coreUserDataService
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
-    List<Calendar> getAllCalendars(boolean allUsers, boolean noAuth = false) {
+    List<Calendar> getAllCalendars(boolean allUsers) {
       try {
-        super.getAll(Calendar.class, typeToken, allUsers, noAuth)
+        super.getAll(Calendar.class, typeToken, allUsers)
       } catch (Exception ex) {
         throw ex
       }
@@ -33,7 +31,7 @@ class CalendarDataService extends BaseDataService {
 
     Calendar createCalendar(Long userId, String description = "") {
 
-        def user = userDataService.getById(CoreUser.class, userId)
+        def user = coreUserDataService.getById(CoreUser.class, userId)
 
         if (!user) { return null }
 
@@ -46,8 +44,8 @@ class CalendarDataService extends BaseDataService {
         super.create(Calendar.class, cal)
     }
 
-    void deleteCalendar(Long calendarId, boolean noAuth = false) {
-        super.delete(calendarId, noAuth)
+    void deleteCalendar(Long calendarId) {
+        super.delete(calendarIds)
     }
 
     def getTTL() { 30 }
