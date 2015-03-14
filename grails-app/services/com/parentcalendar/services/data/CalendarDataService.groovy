@@ -29,7 +29,7 @@ class CalendarDataService extends BaseDataService {
       }
     }
 
-    Calendar createCalendar(Long userId, String description = "") {
+    Calendar createCalendar(Long userId, boolean _default, String description = "") {
 
         def user = coreUserDataService.getById(CoreUser.class, userId)
 
@@ -40,6 +40,7 @@ class CalendarDataService extends BaseDataService {
         cal.description = description
         cal.events = []
         cal.active = true
+        cal._default = _default
 
         super.create(Calendar.class, cal)
     }

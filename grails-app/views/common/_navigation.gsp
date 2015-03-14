@@ -46,7 +46,7 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="j_spring_security_logout">Logout</a></li>
+                    <li><a href="j_spring_security_logout">Logout&nbsp;<sec:username/></a></li>
                 </ul>
             </div>
         </div>

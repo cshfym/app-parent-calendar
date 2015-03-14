@@ -67,7 +67,7 @@ class AdminController {
     }
 
     def createCalendarForUser = {
-        calendarDataService.createCalendar(Long.parseLong(params.userId), params.description)
+        calendarDataService.createCalendar(Long.parseLong(params.userId), true, params.description)
         render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(true) ])
     }
 
@@ -80,6 +80,19 @@ class AdminController {
 
         // GORM
         def user = User.find { id == params.userId }
+
+        // Delete attached roles.
+        def userRoles = UserRole.findAll { user == user }
+        userRoles.each {
+            it.delete(flush: true)
+        }
+
+        // Delete attached calendars.
+        def userCalendars = Calendar.findAll { user == user }
+        userCalendars.each {
+            it.delete(flush: true)
+        }
+
         user.delete(flush: true)
 
         coreUserDataService.flushCache()

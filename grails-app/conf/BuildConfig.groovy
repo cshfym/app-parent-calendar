@@ -56,6 +56,7 @@ grails.project.dependency.resolution = {
       // runtime 'org.postgresql:postgresql:9.3-1100-jdbc41'
       // compile "com.parentcalendar:lib-parent-calendar:1.0"
 
+      compile "org.apache.commons:commons-lang3:3.3.2"
       compile "redis.clients:jedis:2.2.1"
       compile "joda-time:joda-time:2.7"
     }

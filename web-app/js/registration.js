@@ -57,39 +57,95 @@ function checkEmail() {
     });
 }
 
+function checkPassword() {
+
+    $("#password").val($.trim($("#password").val()));
+
+    if ($.isEmptyObject($("#password").val())) {
+        $("#checkPasswordDiv").attr("class", "form-group");
+        $("#checkPasswordErrorMessage").html("");
+        return false;
+    }
+
+    if ($("#password").val().length < 6) {
+        $("#checkPasswordDiv").attr("class", "form-group has-error has-feedback");
+        $("#checkPasswordErrorMessage").html("Password must be at least 6 characters");
+        return false;
+    }
+
+    $("#checkPasswordDiv").attr("class", "form-group has-success has-feedback");
+    $("#checkPasswordErrorMessage").html("");
+
+    return true;
+}
+
+function checkConfirmationPassword() {
+
+    $("#confirmPassword").val($.trim($("#confirmPassword").val()));
+
+    if ($.isEmptyObject($("#password").val())) {
+        $("#checkConfirmPasswordDiv").attr("class", "form-group");
+        $("#checkPasswordConfirmationErrorMessage").html("");
+        return false;
+    }
+
+    if ($("#confirmPassword").val() != $("#password").val()) {
+        $("#checkConfirmPasswordDiv").attr("class", "form-group has-error has-feedback");
+        $("#checkPasswordConfirmationErrorMessage").html("Passwords do not match");
+        return false;
+    }
+
+    $("#checkConfirmPasswordDiv").attr("class", "form-group has-success has-feedback");
+    $("#checkPasswordConfirmationErrorMessage").html("");
+
+    return true;
+}
+
 function validateAllInputs() {
+
+    return true;
 
     if (!validateUsername()) {
         $("#username").focus();
-        alert("Invalid username.");
+        alert("Invalid username");
         return false;
     }
 
     if (!validateUserEmail()) {
         $("#email").focus();
-        alert("Invalid email address.");
+        alert("Invalid email address");
+        return false;
+    }
+
+    if (!checkPassword()) {
+        $("#password").focus();
+        alert("Invalid password");
+        return false;
+    }
+
+    if (!checkConfirmationPassword()) {
+        $("#confirmPassword").focus();
+        alert("Passwords do not match");
         return false;
     }
 
     return true;
+
 }
 
 function validateUsername() {
 
     $("#username").val($.trim($("#username").val()));
 
-    $("#checkUsernameDiv").attr("class", "form-group");
-    $("#checkUsernameErrorMessage").html("");
-
     if ($.isEmptyObject($("#username").val())) {
-        $("#checkUsernameDiv").attr("class", "form-group has-error has-feedback");
-        $("#checkUsernameErrorMessage").html("Please enter a valid username.");
+        $("#checkUsernameDiv").attr("class", "form-group");
+        $("#checkUsernameErrorMessage").html("");
         return false;
     }
 
     if (($("#username").val().length < 6) || ($("#username").val().length > 20)) {
         $("#checkUsernameDiv").attr("class", "form-group has-error has-feedback");
-        $("#checkUsernameErrorMessage").html("Username must be between 6 and 20 characters.");
+        $("#checkUsernameErrorMessage").html("Username must be between 6 and 20 characters");
         return false;
     }
 
@@ -99,12 +155,9 @@ function validateUserEmail() {
 
     $("#email").val($.trim($("#email").val()));
 
-    $("#checkEmailDiv").attr("class", "form-group");
-    $("#checkEmailErrorMessage").html("");
-
     if ($.isEmptyObject($("#email").val())) {
-        $("#checkEmailDiv").attr("class", "form-group has-error has-feedback");
-        $("#checkEmailErrorMessage").html("Please enter a valid email address.");
+        $("#checkEmailDiv").attr("class", "form-group");
+        $("#checkEmailErrorMessage").html("");
         return false;
     }
 
@@ -116,3 +169,4 @@ function validateUserEmail() {
 
     return true;
 }
+

@@ -21,4 +21,15 @@ class UserDataService {
     public User findByEmail(String email) {
         User.find { email == email }
     }
+
+    public User createUser(Map attributes) {
+
+        User user = new User()
+
+        attributes.each {
+            user."$it.key" = it.value
+        }
+
+        user.save(flush: true)
+    }
 }

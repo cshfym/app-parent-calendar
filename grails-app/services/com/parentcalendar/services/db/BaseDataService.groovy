@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.parentcalendar.domain.exception.DataAuthenticationException
 import com.parentcalendar.domain.exception.GenericDataException
+import com.parentcalendar.domain.exception.TokenExpirationException
 import com.parentcalendar.domain.security.User
 import com.parentcalendar.services.cache.RedisCacheService
 import com.parentcalendar.services.db.IDataService
@@ -44,7 +45,7 @@ abstract class BaseDataService implements IDataService {
      * @throws GenericDataException
      */
     public <T> List<T> getAll(Type type, Type listType, boolean allUsers)
-        throws DataAuthenticationException, GenericDataException  {
+        throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -61,6 +62,7 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
+                userToken,
                 allUsers) as RestResponse
 
         switch (response?.status) {
@@ -69,6 +71,9 @@ abstract class BaseDataService implements IDataService {
                   def obj = gson.fromJson(it.toString(), type)
                   data << obj
               }
+              break
+          case 403: // Expired token
+              throw new TokenExpirationException()
               break
           case 401:
               def msg = "Authentication failed on REST getAll() at $endpoint"
@@ -98,7 +103,8 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.post(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
-                payload) as RestResponse
+                payload,
+                userToken) as RestResponse
 
         switch (response?.status) {
             case 200:
@@ -136,7 +142,9 @@ abstract class BaseDataService implements IDataService {
 
         def response = restDataService.get(
                 endpoint as String,
-                grailsApplication.config.calendarData.contentType as String) as RestResponse
+                grailsApplication.config.calendarData.contentType as String,
+                userToken,
+                false) as RestResponse
 
         switch (response?.status) {
             case 200:
@@ -176,6 +184,7 @@ abstract class BaseDataService implements IDataService {
         def response = restDataService.get(
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
+                userToken,
                 allUsers) as RestResponse
 
         switch (response?.status) {
@@ -205,7 +214,8 @@ abstract class BaseDataService implements IDataService {
 
         def response = restDataService.delete(
                 endpoint as String,
-                grailsApplication.config.calendarData.contentType as String) as RestResponse
+                grailsApplication.config.calendarData.contentType as String,
+                userToken) as RestResponse
 
         switch (response?.status) {
             case 200:
