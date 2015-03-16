@@ -16,21 +16,30 @@ class CoreUserDataService extends BaseDataService {
 
   List<CoreUser> getAllUsers() {
     try {
-      super.getAll(CoreUser.class, typeToken, true)
+      super.getAll(CoreUser.class, typeToken, true, null)
     } catch (Exception ex) {
       throw ex
     }
   }
 
   CoreUser getById(Long id) {
-    super.getById(CoreUser.class, id)
+      try {
+          super.getById(CoreUser.class, id)
+      } catch (Exception ex) {
+          throw ex
+      }
   }
 
-  List<CoreUser> getBy(String column, String attribute, boolean allUsers) {
-    super.getBy(CoreUser.class, column, attribute, allUsers)
+  List<CoreUser> getBy(String column, String attribute, boolean allUsers, Long userId) {
+      try {
+          super.getBy(CoreUser.class, column, attribute, allUsers, userId)
+      } catch (Exception ex) {
+          throw ex
+      }
   }
 
   void flushCache() {
+      !! Fix me.
     def endpoint = grailsApplication.config.calendarData.host + dataPath as String
     super.cacheService.flushCache(endpoint)
   }

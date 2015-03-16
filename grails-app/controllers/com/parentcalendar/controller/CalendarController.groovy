@@ -24,7 +24,7 @@ class CalendarController extends BaseController {
     model = new CalendarModel()
 
     model.uiCalendar = new UICalendar()
-    model.userCalendars = service.getAllCalendars(false)
+    model.userCalendars = service.getAllCalendars(false, null)
 
     [ pageModel: model ]
   }

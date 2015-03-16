@@ -3,6 +3,7 @@ package com.parentcalendar.services.data
 import com.google.gson.reflect.TypeToken
 import com.parentcalendar.domain.core.Calendar
 import com.parentcalendar.domain.core.CoreUser
+import com.parentcalendar.domain.exception.TokenExpirationException
 import com.parentcalendar.services.db.BaseDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -21,9 +22,9 @@ class CalendarDataService extends BaseDataService {
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
-    List<Calendar> getAllCalendars(boolean allUsers) {
+    List<Calendar> getAllCalendars(boolean allUsers, Long userId) {
       try {
-        super.getAll(Calendar.class, typeToken, allUsers)
+        super.getAll(Calendar.class, typeToken, allUsers, userId)
       } catch (Exception ex) {
         throw ex
       }
@@ -31,7 +32,12 @@ class CalendarDataService extends BaseDataService {
 
     Calendar createCalendar(Long userId, boolean _default, String description = "") {
 
-        def user = coreUserDataService.getById(CoreUser.class, userId)
+        def user
+        try {
+            user = coreUserDataService.getById(CoreUser.class, userId)
+        } catch (Exception ex) {
+            throw ex
+        }
 
         if (!user) { return null }
 
@@ -46,7 +52,11 @@ class CalendarDataService extends BaseDataService {
     }
 
     void deleteCalendar(Long calendarId) {
-        super.delete(calendarIds)
+        try {
+            super.delete(calendarId)
+        } catch (Exception ex) {
+            throw ex
+        }
     }
 
     def getTTL() { 30 }

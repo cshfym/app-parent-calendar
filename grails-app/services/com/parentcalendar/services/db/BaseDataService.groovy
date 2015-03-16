@@ -39,12 +39,13 @@ abstract class BaseDataService implements IDataService {
      * Gets all entities for the specified type.
      * @param type
      * @param listType
-     * @param allData (Retrieve data irrespective of user
+     * @param allData (Retrieve data irrespective of user)
+     * @param userId (Retrieve user-specific data)
      * @return List<T>
      * @throws DataAuthenticationException
      * @throws GenericDataException
      */
-    public <T> List<T> getAll(Type type, Type listType, boolean allUsers)
+    public <T> List<T> getAll(Type type, Type listType, boolean allUsers, Long userId = null)
         throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
@@ -63,7 +64,8 @@ abstract class BaseDataService implements IDataService {
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
                 userToken,
-                allUsers) as RestResponse
+                allUsers,
+                userId) as RestResponse
 
         switch (response?.status) {
           case 200:
@@ -92,7 +94,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException  {
+    public Object create(Type type, Object obj) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
 
         def returnObj
 
@@ -115,6 +117,9 @@ abstract class BaseDataService implements IDataService {
                 def msg = "Authentication failed on REST create() at $endpoint"
                 log.error msg
                 throw new DataAuthenticationException(msg)
+            case 403: // Expired token
+                throw new TokenExpirationException()
+                break
             default:
                 def msg = "Invalid response code returned from REST create at [$endpoint] with response: [$response.status]"
                 log.error msg
@@ -126,7 +131,7 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id) throws DataAuthenticationException, GenericDataException  {
+    public Object getById(Type type, Long id) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -150,46 +155,8 @@ abstract class BaseDataService implements IDataService {
             case 200:
                 data = gson.fromJson(response?.json.toString(), type)
                 break
-            case 401:
-                def msg = "Authentication failed on REST getById() at $endpoint"
-                log.error msg
-                throw new DataAuthenticationException(msg)
-            default:
-                def msg = "Invalid response code returned from REST getById at [$endpoint] with response: [$response.status]"
-                log.error msg
-                throw new GenericDataException(msg)
-        }
-
-        if (data) {
-            cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
-        }
-
-        data
-    }
-
-    public Object getBy(Type type, String col, Object val, boolean allUsers) throws DataAuthenticationException, GenericDataException  {
-
-        gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
-
-        def data
-        // def cacheKey = getCacheKey("getBy/${col}/${val}")
-        def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${col}/${val}" as String
-
-        def cachedData = cacheService.getCache(cacheKey)
-        if (cachedData) {
-            data = gson.fromJson(cachedData, type);
-            return data
-        }
-
-        def response = restDataService.get(
-                endpoint as String,
-                grailsApplication.config.calendarData.contentType as String,
-                userToken,
-                allUsers) as RestResponse
-
-        switch (response?.status) {
-            case 200:
-                data = gson.fromJson(response?.json.toString(), type)
+            case 403: // Expired token
+                throw new TokenExpirationException()
                 break
             case 401:
                 def msg = "Authentication failed on REST getById() at $endpoint"
@@ -208,7 +175,53 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public void delete(Long id) throws DataAuthenticationException, GenericDataException  {
+    public Object getBy(Type type, String col, Object val, boolean allUsers, Long userId = null)
+        throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+
+        gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
+
+        def data
+        def cacheKey = getCacheKey("getBy/${col}/${val}")
+        def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${col}/${val}" as String
+
+        def cachedData = cacheService.getCache(cacheKey)
+        if (cachedData) {
+            data = gson.fromJson(cachedData, type);
+            return data
+        }
+
+        def response = restDataService.get(
+                endpoint as String,
+                grailsApplication.config.calendarData.contentType as String,
+                userToken,
+                allUsers,
+                userId) as RestResponse
+
+        switch (response?.status) {
+            case 200:
+                data = gson.fromJson(response?.json.toString(), type)
+                break
+            case 403: // Expired token
+                throw new TokenExpirationException()
+                break
+            case 401:
+                def msg = "Authentication failed on REST getById() at $endpoint"
+                log.error msg
+                throw new DataAuthenticationException(msg)
+            default:
+                def msg = "Invalid response code returned from REST getById at [$endpoint] with response: [$response.status]"
+                log.error msg
+                throw new GenericDataException(msg)
+        }
+
+        if (data) {
+            cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
+        }
+
+        data
+    }
+
+    public void delete(Long id) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 

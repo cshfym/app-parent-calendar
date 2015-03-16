@@ -15,7 +15,7 @@ class RestDataService {
 
   private static RestBuilder restBuilder
 
-  public RestResponse get(String resource, String cType, String userToken, boolean allUsers) {
+  public RestResponse get(String resource, String cType, String userToken, boolean allUsers, Long userId = null) {
 
     def response
     try {
@@ -23,6 +23,7 @@ class RestDataService {
         auth userToken
         contentType cType
         header Constants.X_AUTH_ALL_USERS.value, allUsers.toString()
+        header Constants.X_AUTH_USER_ID.value, (userId) ? userId.toString() : ""
       }
     } catch (ConnectException ex) {
       return null //TODO Implement

@@ -12,7 +12,12 @@ class CalendarEventDataService extends BaseDataService {
     private static final log = LogFactory.getLog(this)
 
     CalendarEvent getCalendarEventById(Long id) {
-        super.getById(CalendarEvent.class, id)
+        try {
+            super.getById(CalendarEvent.class, id)
+        } catch (Exception ex) {
+            throw ex
+        }
+
     }
 
     def getTTL() { 30 }

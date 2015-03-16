@@ -6,6 +6,7 @@ import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.security.UserRole
 import com.parentcalendar.services.data.CalendarDataService
 import com.parentcalendar.services.data.CoreUserDataService
+import com.parentcalendar.services.security.UserTokenService
 import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.lang.exception.ExceptionUtils
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,11 +21,14 @@ class AdminController {
     @Autowired
     CalendarDataService calendarDataService
 
+    @Autowired
+    UserTokenService userTokenService
+
     def index() {
 
         def allCalendars
         try {
-            allCalendars = calendarDataService.getAllCalendars(true)
+            allCalendars = calendarDataService.getAllCalendars(true, null)
         } catch (Exception ex) {
             handleException(ex, ex.getMessage())
             return
@@ -45,7 +49,7 @@ class AdminController {
         flash.message = message
         String eMessage = ExceptionUtils.getRootCauseMessage(e)
         log.error eMessage, e
-        redirect(action: "index")
+        redirect controller: "login", action: "auth"
     }
 
     def createUser = {
@@ -88,10 +92,13 @@ class AdminController {
         }
 
         // Delete attached calendars.
-        def userCalendars = Calendar.findAll { user == user }
+        def userCalendars = calendarDataService.getAllCalendars(false, user.id)
         userCalendars.each {
             it.delete(flush: true)
         }
+
+        // Delete token.
+        userTokenService.deleteUserTokens(user)
 
         user.delete(flush: true)
 

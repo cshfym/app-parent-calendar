@@ -1,5 +1,6 @@
 package com.parentcalendar.services.security
 
+import com.parentcalendar.domain.exception.TokenExpirationException
 import com.parentcalendar.domain.security.UserToken
 import com.parentcalendar.services.data.CoreUserDataService
 import grails.transaction.Transactional
@@ -87,7 +88,7 @@ class UserTokenService {
       def session = RequestContextHolder.currentRequestAttributes().getSession()
 
       if (!session["userToken"]) {
-        throw new RuntimeException("Could not get userToken from session.")
+        throw new TokenExpirationException("Could not get userToken from session.")
       }
 
       def userToken = session["userToken"] as UserToken
