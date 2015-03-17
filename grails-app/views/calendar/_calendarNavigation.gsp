@@ -46,10 +46,14 @@
             <a href="#" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <g:each in="${pageModel.userCalendars}" var="userDefinedCalendar">
-                    <li><a href="#">${userDefinedCalendar.description}</a></li>
+                    <g:if test="${!userDefinedCalendar._default}">
+                        <li><a href="#">${userDefinedCalendar.description}</a></li>
+                    </g:if>
                 </g:each>
-                <!-- <li class="divider"></li>
-                <li><a href="#">Separated link</a></li> -->
+                <g:if test="${pageModel.userCalendars.size() > 1}">
+                    <li class="divider"></li>
+                </g:if>
+                <li><a href="#">New Calendar</a></li>
             </ul>
         </div>
     </div>

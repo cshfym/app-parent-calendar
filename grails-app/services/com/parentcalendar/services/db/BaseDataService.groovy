@@ -51,10 +51,9 @@ abstract class BaseDataService implements IDataService {
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data = []
-        def cacheKey = getCacheKey("getAll-" + String.valueOf(allUsers))
         def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
-        def cachedData = cacheService.getCache(cacheKey)
+        def cachedData = cacheService.getCache(getCacheKey(endpoint))
         if (cachedData) {
             data = gson.fromJson(cachedData, listType);
             return data
@@ -88,7 +87,7 @@ abstract class BaseDataService implements IDataService {
         }
 
         if (data && !data.isEmpty()) {
-          cacheService.setCache(cacheKey, gson.toJson(data, List.class), TTL)
+          cacheService.setCache(getCacheKey(endpoint), gson.toJson(data, List.class), TTL)
         }
 
         data
@@ -136,7 +135,7 @@ abstract class BaseDataService implements IDataService {
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data
-        def cacheKey = getCacheKey("getById")
+        def cacheKey = getCacheKey()
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
         def cachedData = cacheService.getCache(cacheKey)
@@ -181,7 +180,7 @@ abstract class BaseDataService implements IDataService {
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data
-        def cacheKey = getCacheKey("getBy/${col}/${val}")
+        def cacheKey = getCacheKey()
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${col}/${val}" as String
 
         def cachedData = cacheService.getCache(cacheKey)
@@ -249,5 +248,10 @@ abstract class BaseDataService implements IDataService {
         cacheService.flushCache(getCacheKey())
     }
 
-
+    String getCacheKey(String endpoint) {
+        new StringBuilder(userAuthenticationService.userId)
+            .append("|")
+            .append(endpoint)
+            .toString()
+    }
 }

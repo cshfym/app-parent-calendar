@@ -63,13 +63,4 @@ class CalendarDataService extends BaseDataService {
     def getDataPath() { "/calendar" }
     String getUserToken() { userTokenService.userTokenStringFromSession  }
 
-    String getCacheKey(String method) {
-        new StringBuffer()
-                .append(userAuthenticationService.userId)
-                .append("|")
-                .append(dataPath)
-                .append("|")
-                .append(method)
-                .toString()
-    }
 }

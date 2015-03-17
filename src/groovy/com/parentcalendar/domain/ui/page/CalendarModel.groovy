@@ -1,6 +1,7 @@
 package com.parentcalendar.domain.ui.page
 
 import com.parentcalendar.domain.ui.UICalendar
+import com.parentcalendar.domain.core.Calendar
 
 /**
  * UI.Page model for the Calendar page.

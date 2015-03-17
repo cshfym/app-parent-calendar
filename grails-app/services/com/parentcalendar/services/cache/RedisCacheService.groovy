@@ -118,49 +118,52 @@ class RedisCacheService {
 
 
 
-  /**
-   * Pointcut for all methods annotated with <code>@Cacheable</code>
-
-   @Pointcut("execution(@Cacheable * *.*(..))")
+    /**
+     * Pointcut for all methods annotated with <code>@RedisCacheable</code>
+     **/
+    @Pointcut("execution(@RedisCacheable * *.*(..))")
     private void cache() { }
 
-   @Around("cache()")
+    @Around("cache()")
     public Object aroundCachedMethods(ProceedingJoinPoint joinPoint) throws Throwable {
 
-    // Get request context.
-    HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()
+        // Get request context.
+        HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest()
 
-    // Get request URI append query parameters if necessary.
-    String requestUri = req.getRequestURI()
-    if(null != req.getQueryString() && !req.getQueryString().isEmpty()) {
-    requestUri += "?" + req.getQueryString()
+        // Get request URI append query parameters if necessary.
+        String requestUri = req.getRequestURI()
+        if(null != req.getQueryString() && !req.getQueryString().isEmpty()) {
+            requestUri += "?" + req.getQueryString()
+        }
+
+        Object result = null
+
+        //Object cacheResult = getCache(requestUri.toString(), Object.class)
+        Object cacheResult = null
+
+        // Cache not found for key.
+        if (!cacheResult) {
+
+            result = joinPoint.proceed() // Execute annotated caller method.
+
+            /*
+            if (result instanceof Response) {
+                Response r = (Response) result
+                String responseJson = r.getEntity().toString()
+                logger.log(Level.INFO, "Cached response at " + requestUri)
+                _cache.setCache(responseJson, requestUri.toString(), getTTL())
+            } else {
+                logger.log(Level.WARNING, "JoinPoint method does not return javax.ws.rs.core.Response no caching will be performed.")
+                return null
+            }
+            */
+
+        } else {
+            log.ino "Returned previously cached response at " + requestUri
+            //result = Response.status(200).entity(cacheResult).build()
+        }
+
+        return result
     }
 
-    Object result = null
-
-    Object cacheResult = getCache(requestUri.toString(), Object.class)
-
-    // Cache not found for key.
-    if (!cacheResult) {
-
-    result = joinPoint.proceed() // Execute annotated caller method.
-
-    if (result instanceof Response) {
-    Response r = (Response) result
-    String responseJson = r.getEntity().toString()
-    logger.log(Level.INFO, "Cached response at " + requestUri)
-    _cache.setCache(responseJson, requestUri.toString(), getTTL())
-    } else {
-    logger.log(Level.WARNING, "JoinPoint method does not return javax.ws.rs.core.Response no caching will be performed.")
-    return null
-    }
-
-    } else {
-    log.ino "Returned previously cached response at " + requestUri
-    //result = Response.status(200).entity(cacheResult).build()
-    }
-
-    return result
-    }
-   */
 }

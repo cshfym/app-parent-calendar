@@ -39,7 +39,6 @@ class CoreUserDataService extends BaseDataService {
   }
 
   void flushCache() {
-      !! Fix me.
     def endpoint = grailsApplication.config.calendarData.host + dataPath as String
     super.cacheService.flushCache(endpoint)
   }
@@ -48,13 +47,4 @@ class CoreUserDataService extends BaseDataService {
   def getDataPath() { "/user" }
   String getUserToken() { userTokenService.userTokenStringFromSession }
 
-    String getCacheKey(String method) {
-        new StringBuffer()
-                .append(userAuthenticationService.userId)
-                .append("|")
-                .append(dataPath)
-                .append("|")
-                .append(method)
-                .toString()
-    }
 }

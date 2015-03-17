@@ -6,5 +6,5 @@ public interface IDataService {
     public getDataPath()
     String getUserToken()
     void flushCache()
-    public getCacheKey(String method)
+    public getCacheKey(String endpoint)
 }
