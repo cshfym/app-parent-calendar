@@ -28,17 +28,17 @@ class AdminController {
 
         def allCalendars
         try {
-            allCalendars = calendarDataService.getAllCalendars(true, null)
+            allCalendars = calendarDataService.getAllCalendars(true, null, true)
         } catch (Exception ex) {
-            handleException(ex, ex.getMessage())
+            handleException(ex)
             return
         }
 
         def allUsers
         try {
-            allUsers = coreUserDataService.getAllUsers()
+            allUsers = coreUserDataService.getAllUsers(true)
         } catch (Exception ex) {
-            handleException(ex, ex.getMessage())
+            handleException(ex)
             return
         }
 
@@ -65,19 +65,23 @@ class AdminController {
         def userRole = new UserRole(user: user, role: role)
         userRole.save(flush: true)
 
-        coreUserDataService.flushCache()
+        coreUserDataService.flushCache("getAllUsers")
+
+        calendarDataService.createCalendar(user.id, true, "Default Calendar")
+
+        calendarDataService.flushCache("getAllCalendars")
 
         render (template: "adminUserList", model: [ users: coreUserDataService.getAllUsers() ])
     }
 
     def createCalendarForUser = {
-        calendarDataService.createCalendar(Long.parseLong(params.userId), true, params.description)
-        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(true) ])
+        calendarDataService.createCalendar(Long.parseLong(params.userId), false, params.description)
+        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(null, true) ])
     }
 
     def deleteCalendar = {
         calendarDataService.deleteCalendar(Long.parseLong(params.calendarId))
-        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(true) ])
+        render (template: "adminCalendarList", model: [ calendars: calendarDataService.getAllCalendars(null, true) ])
     }
 
     def deleteUser = {
@@ -92,9 +96,9 @@ class AdminController {
         }
 
         // Delete attached calendars.
-        def userCalendars = calendarDataService.getAllCalendars(false, user.id)
+        def userCalendars = calendarDataService.getAllCalendars(false, user.id, true)
         userCalendars.each {
-            it.delete(flush: true)
+            calendarDataService.deleteCalendar(it.id)
         }
 
         // Delete token.
@@ -102,9 +106,13 @@ class AdminController {
 
         user.delete(flush: true)
 
-        coreUserDataService.flushCache()
+        coreUserDataService.flushCache("getAllUsers")
+        calendarDataService.flushCache("getAllCalendars")
 
-        render (template: "adminUserList", model: [ users: coreUserDataService.getAllUsers() ])
+        render (
+            template: "adminUserList",
+            model: [ users: coreUserDataService.getAllUsers(), calendars: calendarDataService.getAllCalendars(null, true) ]
+        )
     }
 
     // TODO Move to utils class.

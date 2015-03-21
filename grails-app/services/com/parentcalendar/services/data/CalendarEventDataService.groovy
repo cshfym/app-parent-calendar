@@ -11,9 +11,12 @@ class CalendarEventDataService extends BaseDataService {
 
     private static final log = LogFactory.getLog(this)
 
-    CalendarEvent getCalendarEventById(Long id) {
+    CalendarEvent getCalendarEventById(Long id, boolean noCache = false) {
+
+        def cacheKey = (noCache) ? null : buildCacheKey("getCalendarEventById")
+
         try {
-            super.getById(CalendarEvent.class, id)
+            super.getById(CalendarEvent.class, id, cacheKey)
         } catch (Exception ex) {
             throw ex
         }

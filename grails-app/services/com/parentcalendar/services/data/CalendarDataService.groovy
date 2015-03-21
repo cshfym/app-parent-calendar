@@ -3,7 +3,6 @@ package com.parentcalendar.services.data
 import com.google.gson.reflect.TypeToken
 import com.parentcalendar.domain.core.Calendar
 import com.parentcalendar.domain.core.CoreUser
-import com.parentcalendar.domain.exception.TokenExpirationException
 import com.parentcalendar.services.db.BaseDataService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,12 +21,15 @@ class CalendarDataService extends BaseDataService {
 
     private Type typeToken = new TypeToken<ArrayList<Calendar>>(){}.getType();
 
-    List<Calendar> getAllCalendars(boolean allUsers, Long userId) {
-      try {
-        super.getAll(Calendar.class, typeToken, allUsers, userId)
-      } catch (Exception ex) {
-        throw ex
-      }
+    List<Calendar> getAllCalendars(Long userId = null, boolean noCache = false) {
+
+        def cacheKey = (noCache) ? null : buildCacheKey("getAllCalendars")
+
+        try {
+            super.getAll(Calendar.class, typeToken, cacheKey, userId)
+        } catch (Exception ex) {
+            throw ex
+        }
     }
 
     Calendar createCalendar(Long userId, boolean _default, String description = "") {
@@ -48,12 +50,19 @@ class CalendarDataService extends BaseDataService {
         cal.active = true
         cal._default = _default
 
-        super.create(Calendar.class, cal)
+        def calendar = super.create(Calendar.class, cal)
+
+        if (calendar) {
+            flushCache("getAllCalendars")
+        }
     }
 
-    void deleteCalendar(Long calendarId) {
+    void deleteCalendar(Long calendarId, boolean noCache = false) {
+
+        def flushKey = (noCache) ? null : buildCacheKey("getAllCalendars")
+
         try {
-            super.delete(calendarId)
+            super.delete(calendarId, flushKey)
         } catch (Exception ex) {
             throw ex
         }

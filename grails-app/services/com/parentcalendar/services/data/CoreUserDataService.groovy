@@ -10,41 +10,45 @@ import java.lang.reflect.Type
 @Transactional
 class CoreUserDataService extends BaseDataService {
 
-  private static final log = LogFactory.getLog(this)
+    private static final log = LogFactory.getLog(this)
 
-  private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
+    private Type typeToken = new TypeToken<ArrayList<CoreUser>>(){}.getType();
 
-  List<CoreUser> getAllUsers() {
-    try {
-      super.getAll(CoreUser.class, typeToken, true, null)
-    } catch (Exception ex) {
-      throw ex
+    List<CoreUser> getAllUsers(boolean noCache = false) {
+
+        def cacheKey = (noCache) ? null : buildCacheKey("getAllUsers")
+
+        try {
+            super.getAll(CoreUser.class, typeToken, true, null, cacheKey)
+        } catch (Exception ex) {
+            throw ex
+        }
     }
-  }
 
-  CoreUser getById(Long id) {
-      try {
-          super.getById(CoreUser.class, id)
-      } catch (Exception ex) {
-          throw ex
-      }
-  }
+    CoreUser getById(Long id, boolean noCache = false) {
 
-  List<CoreUser> getBy(String column, String attribute, boolean allUsers, Long userId) {
-      try {
-          super.getBy(CoreUser.class, column, attribute, allUsers, userId)
-      } catch (Exception ex) {
-          throw ex
-      }
-  }
+        def cacheKey = (noCache) ? null : buildCacheKey("getById?id=${id}")
 
-  void flushCache() {
-    def endpoint = grailsApplication.config.calendarData.host + dataPath as String
-    super.cacheService.flushCache(endpoint)
-  }
+        try {
+            super.getById(CoreUser.class, id, cacheKey)
+        } catch (Exception ex) {
+            throw ex
+        }
+    }
 
-  def getTTL() { 30 }
-  def getDataPath() { "/user" }
-  String getUserToken() { userTokenService.userTokenStringFromSession }
+    List<CoreUser> getBy(String column, String attribute, boolean allUsers, Long userId, boolean noCache = false) {
+
+        def cacheKey = (noCache) ? null : buildCacheKey("getBy/${column}/${attribute}?allUsers=${allUsers}&userId=${userId}")
+
+        try {
+            super.getBy(CoreUser.class, column, attribute, allUsers, userId, cacheKey)
+        } catch (Exception ex) {
+            throw ex
+        }
+    }
+
+    def getTTL() { 30 }
+    def getDataPath() { "/user" }
+    String getUserToken() { userTokenService.userTokenStringFromSession }
 
 }

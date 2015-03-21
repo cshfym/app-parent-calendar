@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.web.context.request.RequestContextHolder
 
 @Transactional
 @Component
@@ -26,18 +27,14 @@ class UserAuthenticationService {
      */
     public String getUserTokenString() {
 
-      if (!SecurityContextHolder.context.authentication?.authenticated) { return null }
+        if (!SecurityContextHolder.context.authentication?.authenticated) { return null }
 
-      String sessionId = SecurityContextHolder.context.authentication?.details?.sessionId as String
-      if (!sessionId) {
-          log.info "No sessionId available in SecurityContextHolder while calling getUserToken."
-          return null
-      }
+        String sessionId = RequestContextHolder.currentRequestAttributes().sessionId
 
-      // Encoded user ID + unique session ID + shared application token.
-      (SecurityContextHolder.context.authentication.principal.id + "|" +
-        sessionId + "|" +
-        grailsApplication.config.authentication.token).encodeAsBase64()
+        // Encoded user ID + unique session ID + shared application token.
+        (SecurityContextHolder.context.authentication.principal.id + "|" +
+                sessionId + "|" +
+                grailsApplication.config.authentication.token).encodeAsBase64()
     }
 
     /**
@@ -45,7 +42,7 @@ class UserAuthenticationService {
      * @return
      */
     public User getUser() {
-      User.find { id == userId }
+        User.find { id == userId }
     }
 
     /**
@@ -53,14 +50,16 @@ class UserAuthenticationService {
      * @return Long
      */
     public Long getUserId() {
-      if (!SecurityContextHolder.context.authentication?.principal) { return null }
-      SecurityContextHolder.context.authentication.principal.id
+        if (!SecurityContextHolder.context.authentication?.principal) { return null }
+        SecurityContextHolder.context.authentication.principal.id
     }
 
+    /*
     public String getSessionId() {
         if (!SecurityContextHolder.context.authentication?.details?.sessionId) { return null }
         SecurityContextHolder.context.authentication?.details?.sessionId
     }
+      */
 
     /**
      * Convenience method to return the currently authenticated username.

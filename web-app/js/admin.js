@@ -1,5 +1,7 @@
 
 function createUser() {
+    //$("#btnCreateUser").attr("disabled","disabled");
+
     var link = "/app-parent-calendar/admin/createUser";
     var parameters = { };
     $.ajax({
@@ -15,6 +17,8 @@ function createUser() {
         },
         complete: function() { }
     });
+
+    //$("#btnCreateUser").attr("disabled","");
 }
 
 function createCalendarForUser(id) {

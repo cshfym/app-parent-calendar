@@ -15,9 +15,6 @@
         </div>
 
         <div class="panel-body">
-            <g:if test='${flash.message}'>
-                <div class="alert alert-dismissible alert-danger">${flash.message}</div>
-            </g:if>
 
             <form class="form-horizontal" action="${postUrl}" method="POST" id="loginForm" autocomplete="off">
                 <fieldset>

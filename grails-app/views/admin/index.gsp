@@ -29,8 +29,8 @@
         <g:form controller="admin">
 
             <div class="well">
-                <a href="#" class="btn btn-success" onclick="createUser();">Create User</a>
-                <a href="#" class="btn btn-success" data-toggle="modal" data-target="#createCalendarModal">Create Calendar</a>
+                <a id="btnCreateUser" href="#" class="btn btn-success" onclick="createUser();">Create User</a>
+                <a id="btnCreateCalendar" href="#" class="btn btn-success" data-toggle="modal" data-target="#createCalendarModal">Create Calendar</a>
             </div>
 
             <hr />

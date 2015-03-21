@@ -5,6 +5,7 @@ import com.parentcalendar.domain.security.UserRole
 class BootStrap {
 
     def init = { servletContext ->
+
 /*
       def adminRole = new Role(authority: 'ROLE_ADMIN').save(flush: true)
       def userRole = new Role(authority: 'ROLE_USER').save(flush: true)
@@ -15,7 +16,7 @@ class BootStrap {
       testUser.save(flush: true)
 */
 
-      //def adminRole = Role.find { authority == "ROLE_ADMIN" }
+        //def adminRole = Role.find { authority == "ROLE_ADMIN" }
 
         /*
       def testUser = User.find { username == "test_1" }
@@ -23,9 +24,8 @@ class BootStrap {
       testUser.save(flush: true)
           */
 
-      // UserRole.create(testUser,adminRole,true)
+        // UserRole.create(testUser,adminRole,true)
     }
 
-    def destroy = {
-    }
+    def destroy = { }
 }

@@ -56,11 +56,9 @@ class UserTokenService {
 
     def token = new UserToken(
       user: user,
-      sessionId: authenticationService.sessionId,
       token: tokenString,
       issued: new Date())
 
-    // Save new token.
     token.save(flush: true)
   }
 
@@ -104,10 +102,4 @@ class UserTokenService {
     false
   }
 
-
-  /*
-  private String getTokenString(int len = 20) {
-    RandomStringUtils.random(len, (("a".."z") + ("0".."9")).join().toCharArray())
-  }
-  */
 }
