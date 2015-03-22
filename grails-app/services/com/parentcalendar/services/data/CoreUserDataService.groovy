@@ -19,7 +19,7 @@ class CoreUserDataService extends BaseDataService {
         def cacheKey = (noCache) ? null : buildCacheKey("getAllUsers")
 
         try {
-            super.getAll(CoreUser.class, typeToken, true, null, cacheKey)
+            super.getAll(CoreUser.class, typeToken, cacheKey, null)
         } catch (Exception ex) {
             throw ex
         }

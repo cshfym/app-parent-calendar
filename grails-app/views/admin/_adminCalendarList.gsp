@@ -5,7 +5,9 @@
             <tr>
                 <td>${calendar}</td>
                 <td>
-                    <a class="btn btn-xs btn-danger" href="#" onclick="deleteCalendar(${calendar.id})">Delete</a>
+                    <g:if test="${!calendar._default}">
+                        <a class="btn btn-xs btn-danger" href="#" onclick="deleteCalendar(${calendar.id})">Delete</a>
+                    </g:if>
                 </td>
             </tr>
         </g:each>

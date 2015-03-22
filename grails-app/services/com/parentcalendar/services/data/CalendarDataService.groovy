@@ -45,7 +45,7 @@ class CalendarDataService extends BaseDataService {
 
         Calendar cal = new Calendar()
         cal.user = user
-        cal.description = description
+        cal.description = (description) ? description : ""
         cal.events = []
         cal.active = true
         cal._default = _default

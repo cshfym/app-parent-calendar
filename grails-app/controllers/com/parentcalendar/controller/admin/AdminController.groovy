@@ -28,9 +28,9 @@ class AdminController {
 
         def allCalendars
         try {
-            allCalendars = calendarDataService.getAllCalendars(true, null, true)
+            allCalendars = calendarDataService.getAllCalendars(null, true)
         } catch (Exception ex) {
-            handleException(ex)
+            handleException(ex, "")
             return
         }
 
@@ -38,7 +38,7 @@ class AdminController {
         try {
             allUsers = coreUserDataService.getAllUsers(true)
         } catch (Exception ex) {
-            handleException(ex)
+            handleException(ex, "")
             return
         }
 

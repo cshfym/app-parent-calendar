@@ -154,7 +154,7 @@ abstract class BaseDataService implements IDataService {
                 endpoint as String,
                 grailsApplication.config.calendarData.contentType as String,
                 userToken,
-                false) as RestResponse
+                null) as RestResponse
 
         if (!response) {
             // No response from restDataService
