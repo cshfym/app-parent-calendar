@@ -37,7 +37,7 @@
             <g:render template="adminUserList" />
             <hr />
             <g:render template="adminCalendarList" />
-            <hr />
+
             <g:render template="adminCreateCalendarDialog" />
        </g:form>
     </div>

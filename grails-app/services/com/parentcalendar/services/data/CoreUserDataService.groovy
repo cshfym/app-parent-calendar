@@ -16,7 +16,8 @@ class CoreUserDataService extends BaseDataService {
 
     List<CoreUser> getAllUsers(boolean noCache = false) {
 
-        def cacheKey = (noCache) ? null : buildCacheKey("getAllUsers")
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+        def cacheKey = (noCache) ? null : buildCacheKey(endpoint)
 
         try {
             super.getAll(CoreUser.class, typeToken, cacheKey, null)

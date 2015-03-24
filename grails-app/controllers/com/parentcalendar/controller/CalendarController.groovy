@@ -1,8 +1,11 @@
 package com.parentcalendar.controller
 
+import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.domain.ui.page.CalendarModel
 import com.parentcalendar.services.data.CalendarDataService
+import com.parentcalendar.services.data.CalendarEventDataService
+import com.parentcalendar.services.security.UserAuthenticationService
 import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.annotation.Secured
@@ -16,6 +19,12 @@ class CalendarController extends BaseController {
     @Autowired
     CalendarDataService service
 
+    @Autowired
+    CalendarEventDataService eventDataService
+
+    @Autowired
+    UserAuthenticationService authenticationService
+
     CalendarModel model
 
     def index() {
@@ -25,7 +34,7 @@ class CalendarController extends BaseController {
         model.uiCalendar = new UICalendar()
 
         try {
-            model.userCalendars = service.getAllCalendars(sessionUserId, false)
+            model.userCalendars = service.getAllCalendars(sessionUser.id, false)
         } catch (Exception ex) {
             handleException(ex)
             model.userCalendars = []
@@ -77,6 +86,20 @@ class CalendarController extends BaseController {
     def switchView = {
 
         getUICalendar().weekView = (params.viewType.toLowerCase() == "week") ? true : false
+        render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
+    }
+
+    def createCalendarEvent = {
+
+        Date eventDate = new SimpleDateFormat("MM/dd/yyyy").parse(params.eventDate as String)
+        String eventDescription = params.eventDescription
+        Long eventCalendarId = Long.parseLong(params.eventCalendarId.toString())
+        String eventFromTime = params.eventFromTime
+        String eventToTime = params.eventToTime
+        boolean allDayEvent = params.allDayEvent
+
+        eventDataService.createCalendarEvent(eventDate, sessionUser, eventCalendarId, eventDescription, eventFromTime, eventToTime, allDayEvent)
+
         render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
     }
 }

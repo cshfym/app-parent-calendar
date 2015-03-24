@@ -9,7 +9,9 @@ class Calendar {
     Date createDate
     Date updateDate
     String description
+    String color
     boolean _default
+
     List<CalendarEvent> events
 
     @Override

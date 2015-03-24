@@ -14,6 +14,27 @@ function adjustCalendarHeight() {
   $(".calendar-day-container").height(tableHeight / weekCount);
 }
 
+function launchCreateCalendarEvent(id) {
+
+    var millis = new Number(id.replace("td_",""));
+    var eventDate = new Date(millis);
+
+    var formatted = (eventDate.getMonth()+1) + "/" + eventDate.getDate() + "/" + eventDate.getFullYear();
+
+    $("#eventDate").text(formatted);
+    // $("#eventDate").val(date.toString());
+    $("#createCalendarEventModal").modal("show");
+}
+
+function doCheckAllDayEvent(control) {
+    var row = $("#rowTimeSelection");
+    if(control.checked) {
+        row.fadeOut("fast");
+    } else {
+        row.fadeIn("fast");
+    }
+}
+
 function highlightDay(id) {
   $("#" + id).attr("class", "calendar-day-container highlight-day");
 }
@@ -139,4 +160,36 @@ function switchView(view) {
         },
         complete: function() { }
     });
+}
+
+function createCalendarEvent() {
+
+    var link = "/app-parent-calendar/calendar/createCalendarEvent";
+    var parameters = {
+        eventDate: $("#eventDate").text(),
+        eventDescription: $("#eventDescription").val(),
+        eventCalendarId: $("#fromCalendar").val(),
+        eventFromTime: $("#fromTime").val(),
+        eventToTime: $("#toTime").val(),
+        allDayEvent: $("#ckAllDayEvent").is(':checked')
+    };
+
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarHeight();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() {
+            $("#createCalendarEventModal").modal("hide");
+        }
+    });
+
+
 }

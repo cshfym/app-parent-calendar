@@ -53,7 +53,7 @@
                 <g:if test="${pageModel.userCalendars.size() > 1}">
                     <li class="divider"></li>
                 </g:if>
-                <li><a href="#">New Calendar</a></li>
+                <li><a href="#">Create New...</a></li>
             </ul>
         </div>
     </div>

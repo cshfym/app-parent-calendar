@@ -23,10 +23,11 @@ class CalendarDataService extends BaseDataService {
 
     List<Calendar> getAllCalendars(Long userId = null, boolean noCache = false) {
 
-        def cacheKey = (noCache) ? null : buildCacheKey("getAllCalendars")
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+        def cacheKey = (noCache) ? null : buildCacheKey(endpoint)
 
         try {
-            super.getAll(Calendar.class, typeToken, cacheKey, userId)
+            super.getAll(Calendar.class, typeToken, endpoint, cacheKey, userId)
         } catch (Exception ex) {
             throw ex
         }
@@ -48,12 +49,20 @@ class CalendarDataService extends BaseDataService {
         cal.description = (description) ? description : ""
         cal.events = []
         cal.active = true
+        cal.color = "#800000"  // TODO Do something with this..
         cal._default = _default
 
-        def calendar = super.create(Calendar.class, cal)
+        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
+
+        def calendar
+        try {
+            calendar = super.create(Calendar.class, cal, endpoint)
+        } catch (Exception ex) {
+            throw ex
+        }
 
         if (calendar) {
-            flushCache("getAllCalendars")
+            flushCache(buildCacheKey(endpoint))
         }
     }
 

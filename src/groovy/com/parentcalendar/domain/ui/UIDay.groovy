@@ -34,7 +34,11 @@ class UIDay {
       && uiDate.get(Calendar.DAY_OF_MONTH).equals(today.get(Calendar.DAY_OF_MONTH)))
   }
 
-  protected Calendar toCalendar() {
+  public Long toMillis() {
+    toCalendar().timeInMillis
+  }
+
+  public Calendar toCalendar() {
     Calendar cal = Calendar.getInstance()
     cal.setTime(date)
     cal

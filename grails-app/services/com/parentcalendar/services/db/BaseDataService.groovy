@@ -46,13 +46,12 @@ abstract class BaseDataService implements IDataService {
      * @throws DataAuthenticationException
      * @throws GenericDataException
      */
-    public <T> List<T> getAll(Type type, Type listType, String cacheKey = null, Long userId = null)
-        throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+    public <T> List<T> getAll(Type type, Type listType, String endpoint, String cacheKey = null, Long userId = null)
+        throws DataAuthenticationException, GenericDataException {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def data = []
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
         if (cacheKey) {
             def cachedData = cacheService.getCache(cacheKey)
@@ -90,18 +89,18 @@ abstract class BaseDataService implements IDataService {
               throw new GenericDataException(msg)
         }
 
-        if (data && !data.isEmpty()) {
+        if (cacheKey && data && !data.isEmpty()) {
           cacheService.setCache(cacheKey, gson.toJson(data, List.class), TTL)
         }
 
         data
     }
 
-    public Object create(Type type, Object obj, String flushKey = null) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+    public Object create(Type type, Object obj, String endpoint) throws DataAuthenticationException, GenericDataException {
+
+        gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
         def returnObj
-
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
         String payload = gson.toJson(obj, type)
 
@@ -112,7 +111,6 @@ abstract class BaseDataService implements IDataService {
                 userToken) as RestResponse
 
         if (!response) {
-            // No response from restDataService
             throw new DataCommunicationException("No response received from data service")
         }
 
@@ -120,7 +118,6 @@ abstract class BaseDataService implements IDataService {
             case 200:
             case 201:
                 returnObj = gson.fromJson(response.json.toString(), type)
-                if (flushKey) { flushCache(flushKey) }
                 break
             case 401:
                 def msg = "Authentication failed on REST create() at $endpoint"
@@ -135,7 +132,7 @@ abstract class BaseDataService implements IDataService {
         returnObj
     }
 
-    public Object getById(Type type, Long id, String cacheKey = null) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+    public Object getById(Type type, Long id, String cacheKey = null) throws DataAuthenticationException, GenericDataException {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -177,7 +174,7 @@ abstract class BaseDataService implements IDataService {
                 break
         }
 
-        if (data) {
+        if (cacheKey && data) {
             cacheService.setCache(cacheKey, gson.toJson(data, type), TTL)
         }
 
@@ -185,7 +182,7 @@ abstract class BaseDataService implements IDataService {
     }
 
     public Object getBy(Type type, String col, Object val, boolean allUsers, Long userId = null, String cacheKey = null)
-        throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+        throws DataAuthenticationException, GenericDataException {
 
         gson = new GsonBuilder().setDateFormat(grailsApplication.config.gson.dateformat).create()
 
@@ -233,7 +230,7 @@ abstract class BaseDataService implements IDataService {
         data
     }
 
-    public void delete(Long id, String flushKey = null) throws DataAuthenticationException, GenericDataException, TokenExpirationException  {
+    public void delete(Long id, String flushKey = null) throws DataAuthenticationException, GenericDataException {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath + "/${id}" as String
 
@@ -260,13 +257,16 @@ abstract class BaseDataService implements IDataService {
                 log.error msg
                 throw new GenericDataException(msg)
         }
+
+        if (flushKey) {
+            flushCache(flushKey)
+        }
     }
 
-    String buildCacheKey(String method) {
+    String buildCacheKey(String endpoint) {
         new StringBuilder(userAuthenticationService.userId.toString())
-                .append(getDataPath())
                 .append("/")
-                .append(method)
+                .append(endpoint)
                 .toString()
     }
 

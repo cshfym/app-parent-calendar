@@ -17,35 +17,17 @@
           <g:each in="${pageModel.uiCalendar.weeks}" var="week">
             <tr>
               <g:each in="${week.days}" var="day">
-                <td class="td-day-container">
+                <td id="td_${day.toMillis()}" class="td-day-container" onclick="launchCreateCalendarEvent(this.id)">
                   <g:if test="${day.isToday()}">
                     <div id="day_${day.getCondensedDateString()}" class="calendar-day-container today"
                          onmouseover="highlightToday(this.id)" onmouseout="unHighlightToday(this.id)" onclick="selectDay(this.id)">
-                        <g:if test="${day?.isInCalendarMonth()}">
-                            <div class="day-number">
-                                ${day?.getDayNumber()}
-                            </div>
-                        </g:if>
-                        <g:else>
-                            <div class="day-number-not-in-month">
-                                ${day?.getDayNumber()}
-                            </div>
-                        </g:else>
+                        <g:render template="innerCalendarEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
                     </div>
                   </g:if>
                   <g:else>
                     <div id="day_${day.getCondensedDateString()}" class="calendar-day-container not-in-month"
                        onmouseover="highlightDay(this.id)" onmouseout="unHighlightDay(this.id)" onclick="selectDay(this.id)">
-                        <g:if test="${day?.isInCalendarMonth()}">
-                            <div class="day-number">
-                                ${day?.getDayNumber()}
-                            </div>
-                        </g:if>
-                        <g:else>
-                            <div class="day-number-not-in-month">
-                                ${day?.getDayNumber()}
-                            </div>
-                        </g:else>
+                        <g:render template="innerCalendarEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
                     </div>
                   </g:else>
                 </td>

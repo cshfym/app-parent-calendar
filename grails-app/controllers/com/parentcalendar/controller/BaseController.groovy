@@ -1,6 +1,7 @@
 package com.parentcalendar.controller
 
 import com.parentcalendar.domain.exception.DataCommunicationException
+import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.security.UserToken
 import com.parentcalendar.services.security.UserTokenService
 import org.apache.commons.lang.exception.ExceptionUtils
@@ -25,17 +26,23 @@ class BaseController {
                 return
             }
         }
+
+        // Validate session token and refresh if needed.
+        def token = session["userToken"] as UserToken
+        if (tokenService.isExpired(token.issued)) {
+            session["userToken"] = tokenService.refreshToken(token)
+        }
     }
 
-    Long getSessionUserId() {
+    User getSessionUser() {
 
         if (!session["userToken"]) { return null }
 
         UserToken token = (UserToken) session["userToken"]
 
-        if (!token.user.id) { return null }
+        if (!token.user) { return null }
 
-        token.user.id
+        token.user
     }
 
     def handleException(Exception ex) {

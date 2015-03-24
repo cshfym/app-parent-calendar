@@ -48,11 +48,11 @@
     background-color: #aaccf5;
 }
 .highlight-day {
-    border: 1px solid darkred;
+    border: 1px solid mediumpurple;
     border-radius: 5px;
 }
 .highlight-today {
-    border: 1px solid darkred;
+    border: 1px solid mediumpurple;
     background-color: #aaccf5;
 }
 .day-number {

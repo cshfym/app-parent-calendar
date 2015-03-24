@@ -46,6 +46,8 @@
         </div>
         <!-- /#page-content-wrapper -->
 
+        <g:render template="createCalendarEventDialog" />
+
     </div>
     <!-- /#wrapper -->
 
