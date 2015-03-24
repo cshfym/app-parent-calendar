@@ -5,10 +5,13 @@ import com.parentcalendar.services.security.UserAuthenticationService
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
+import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 
 @Transactional
 class RestDataService {
+
+  private static final log = LogFactory.getLog(this)
 
   @Autowired
   UserAuthenticationService authenticationService
@@ -24,10 +27,9 @@ class RestDataService {
         contentType cType
         header Constants.X_AUTH_USER_ID.value, (userId) ? userId.toString() : ""
       }
-    } catch (ConnectException ex) {
-      return null //TODO Implement
-    } catch (Exception ex) {
-      return null //TODO Implement
+    } catch (ConnectException | Exception ex) {
+      log.error ex.message, ex
+      throw ex
     }
 
     response
@@ -42,11 +44,11 @@ class RestDataService {
         contentType cType
         json payload
       }
-    } catch (ConnectException ex) {
-        return null //TODO Implement
-    } catch (Exception ex) {
-        return null //TODO Implement
+    } catch (ConnectException | Exception ex) {
+      log.error ex.message, ex
+      throw ex
     }
+
 
     response
   }
@@ -60,11 +62,11 @@ class RestDataService {
         contentType cType
         json payload
       }
-    } catch (ConnectException ex) {
-      return null //TODO Implement
-    } catch (Exception ex) {
-      return null //TODO Implement
+    } catch (ConnectException | Exception ex) {
+      log.error ex.message, ex
+      throw ex
     }
+
 
     response
   }
@@ -77,11 +79,11 @@ class RestDataService {
         auth userToken
         contentType cType
       }
-    } catch (ConnectException ex) {
-      return null //TODO Implement me...
-    } catch (Exception ex) {
-      return null //TODO Implement me...
+    } catch (ConnectException | Exception ex) {
+      log.error ex.message, ex
+      throw ex
     }
+
 
     response
   }
