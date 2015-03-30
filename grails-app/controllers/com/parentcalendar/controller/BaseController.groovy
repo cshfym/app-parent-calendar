@@ -20,17 +20,18 @@ class BaseController {
             def token = tokenService.token
             if (token) {
                 session["userToken"] = token
+                return
             } else {
                 response.setStatus(500)
                 println "No token."
                 return
             }
-        }
-
-        // Validate session token and refresh if needed.
-        def token = session["userToken"] as UserToken
-        if (tokenService.isExpired(token.issued)) {
-            session["userToken"] = tokenService.refreshToken(token)
+        } else {
+            // Validate session token and refresh if needed.
+            def token = session["userToken"] as UserToken
+            if (tokenService.isExpired(token.issued)) {
+              session["userToken"] = tokenService.refreshToken(token)
+            }
         }
     }
 

@@ -29,6 +29,7 @@ class CalendarDataService extends BaseDataService {
         try {
             calendars =super.getAll(Calendar.class, typeToken, endpoint, cacheKey, userId)
         } catch (Exception ex) {
+            log.error ex.getMessage(), ex
             throw ex
         }
 
