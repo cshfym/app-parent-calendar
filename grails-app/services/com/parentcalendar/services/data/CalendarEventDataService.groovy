@@ -17,17 +17,16 @@ class CalendarEventDataService extends BaseDataService {
     @Autowired
     CalendarDataService calendarDataService
 
-    CalendarEvent createCalendarEvent(Date eventDate, User user, Long calendarId, String description, String fromTime, String toTime, boolean allDay) {
+    CalendarEvent createCalendarEvent(User user, Long calendarId, String description, Date fromDate, Date toDate, String fromTime, String toTime, boolean allDay) {
 
         def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
         def event = new CalendarEvent(
             calendar: calendarDataService.getById(Calendar.class, calendarId),
             user: user,
-            eventDate: eventDate,
             description: description,
-            fromTime: buildFullDateFromEventTime(fromTime, eventDate),
-            toTime: buildFullDateFromEventTime(toTime, eventDate),
+            fromTime: buildFullDateFromEventTime(fromDate, fromTime, allDay),
+            toTime: buildFullDateFromEventTime(toDate, toTime, allDay),
             allDay: allDay,
             active: true)
 
@@ -43,7 +42,7 @@ class CalendarEventDataService extends BaseDataService {
         }
     }
 
-    protected Date buildFullDateFromEventTime(String partial, Date eventDate) {
+    protected Date buildFullDateFromEventTime(Date date, String partial, boolean allDay) {
 
         // Parse HH:MM A/P
         def partialSplit = partial.split(" ")
@@ -53,9 +52,14 @@ class CalendarEventDataService extends BaseDataService {
         int hour = Integer.parseInt(splitHoursSeconds[0]) + tHour
         int minute = Integer.parseInt(splitHoursSeconds[1])
 
-        // Apply to eventDate
+        if (allDay) {
+            hour = 0
+            minute = 0
+        }
+
+        // Apply to date
         java.util.Calendar cal = java.util.Calendar.getInstance()
-        cal.setTime(eventDate)
+        cal.setTime(date )
         cal.set(java.util.Calendar.HOUR_OF_DAY, hour)
         cal.set(java.util.Calendar.MINUTE, minute)
 

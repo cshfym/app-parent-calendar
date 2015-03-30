@@ -4,7 +4,7 @@ $(document).ready(function() {
 });
 
 function adjustCalendarHeight() {
-  var tableHeight = $(window).height() - 250;
+  var tableHeight = $(window).height() - 200;
   if (tableHeight < 500) { tableHeight = 500; }
   var weekCount = $("#weekCount").val();
   if(!weekCount) {
@@ -17,21 +17,23 @@ function adjustCalendarHeight() {
 function launchCreateCalendarEvent(id) {
 
     var millis = new Number(id.replace("td_",""));
-    var eventDate = new Date(millis);
+    var fromDate = new Date(millis);
 
-    var formatted = (eventDate.getMonth()+1) + "/" + eventDate.getDate() + "/" + eventDate.getFullYear();
+    var formatted = (fromDate.getMonth()+1) + "/" + fromDate.getDate() + "/" + fromDate.getFullYear();
 
-    $("#eventDate").text(formatted);
-    // $("#eventDate").val(date.toString());
+    $("#fromDate").text(formatted);
+    $("#toDate").text(formatted);
+
     $("#createCalendarEventModal").modal("show");
 }
 
 function doCheckAllDayEvent(control) {
-    var row = $("#rowTimeSelection");
     if(control.checked) {
-        row.fadeOut("fast");
+        $("#fromTime").fadeOut("fast");
+        $("#toTime").fadeOut("fast");
     } else {
-        row.fadeIn("fast");
+        $("#fromTime").fadeIn("fast");
+        $("#toTime").fadeIn("fast");
     }
 }
 
@@ -166,11 +168,12 @@ function createCalendarEvent() {
 
     var link = "/app-parent-calendar/calendar/createCalendarEvent";
     var parameters = {
-        eventDate: $("#eventDate").text(),
-        eventDescription: $("#eventDescription").val(),
-        eventCalendarId: $("#fromCalendar").val(),
-        eventFromTime: $("#fromTime").val(),
-        eventToTime: $("#toTime").val(),
+        fromDate: $("#fromDate").text(),
+        toDate: $("#toDate").text(),
+        description: $("#eventDescription").val(),
+        calendarId: $("#fromCalendar").val(),
+        fromTime: $("#fromTime").val(),
+        toTime: $("#toTime").val(),
         allDayEvent: $("#ckAllDayEvent").is(':checked')
     };
 
@@ -190,6 +193,5 @@ function createCalendarEvent() {
             $("#createCalendarEventModal").modal("hide");
         }
     });
-
 
 }

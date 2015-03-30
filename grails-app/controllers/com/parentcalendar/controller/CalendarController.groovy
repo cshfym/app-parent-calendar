@@ -1,6 +1,5 @@
 package com.parentcalendar.controller
 
-import com.parentcalendar.domain.security.User
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.domain.ui.page.CalendarModel
 import com.parentcalendar.services.data.CalendarDataService
@@ -33,17 +32,23 @@ class CalendarController extends BaseController {
 
         model.uiCalendar = new UICalendar()
 
-        try {
-            model.userCalendars = service.getAllCalendars(sessionUser.id, false)
-        } catch (Exception ex) {
-            handleException(ex)
-            model.userCalendars = []
-        }
+        loadCalendarInModel(false)
 
         [ pageModel: model ]
     }
 
+    protected loadCalendarInModel(boolean noCache) {
+
+        try {
+            model.userCalendars = service.getAllCalendars(sessionUser.id, noCache)
+        } catch (Exception ex) {
+            handleException(ex)
+            model.userCalendars = []
+        }
+    }
+
     UICalendar getUICalendar() {
+
         if (!model.uiCalendar) {
             model.uiCalendar = new UICalendar()
         }
@@ -91,14 +96,21 @@ class CalendarController extends BaseController {
 
     def createCalendarEvent = {
 
-        Date eventDate = new SimpleDateFormat("MM/dd/yyyy").parse(params.eventDate as String)
-        String eventDescription = params.eventDescription
-        Long eventCalendarId = Long.parseLong(params.eventCalendarId.toString())
-        String eventFromTime = params.eventFromTime
-        String eventToTime = params.eventToTime
-        boolean allDayEvent = params.allDayEvent
+        Date fromDate = new SimpleDateFormat("MM/dd/yyyy").parse(params.fromDate as String)
+        Date toDate = new SimpleDateFormat("MM/dd/yyyy").parse(params.toDate as String)
+        String fromTime = params.fromTime
+        String toTime = params.toTime
+        String description = params.description
+        Long calendarId = Long.parseLong(params.calendarId.toString())
+        boolean allDayEvent = Boolean.parseBoolean(params.allDayEvent as String)
 
-        eventDataService.createCalendarEvent(eventDate, sessionUser, eventCalendarId, eventDescription, eventFromTime, eventToTime, allDayEvent)
+        eventDataService.createCalendarEvent(sessionUser, calendarId, description, fromDate, toDate, fromTime, toTime, allDayEvent)
+
+        service.flushCache(service.endpoint)
+
+        loadCalendarInModel(true)
+
+        getUICalendar().build()
 
         render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
     }

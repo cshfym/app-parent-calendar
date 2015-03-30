@@ -13,11 +13,11 @@
                     <table>
                         <tr>
                             <td>
-                                <label class="col-lg-2 control-label">Date</label>
+                                <label class="col-lg-2 control-label">From</label>
                             </td>
-                            <td colspan="3">
+                            <td>
                                 <div class="input-group">
-                                    <label id="eventDate" name="eventDate" class="form-control"></label>
+                                    <label id="fromDate" name="fromDate" class="form-control"></label>
                                     <span class="input-group-btn">
                                         <button class="btn btn-default" type="button">
                                             <span class="glyphicon glyphicon-calendar" style="font-size: 12px; color: #008CBA;"></span>
@@ -25,25 +25,38 @@
                                     </span>
                                 </div>
                             </td>
-                            <!--
                             <td>&nbsp;</td>
                             <td>
-                                <a href="#" class="btn btn-xs" onclick="" title="Last Month">
-                                    <span class="glyphicon glyphicon-backward" aria-hidden="true"></span>
-                                </a>
-                                <a href="#" class="btn btn-xs" onclick="" title="Yesterday">
-                                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                                </a>
-                                <a href="#" class="btn btn-xs" onclick="" title="Tomorrow">
-                                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                                </a>
-                                <a href="#" class="btn btn-xs" onclick="" title="Next Month">
-                                    <span class="glyphicon glyphicon-forward" aria-hidden="true"></span>
-                                </a>
+                                <g:select class="form-control" id="fromTime" name="fromTime"
+                                          from="${pageModel.eventTimeIntervals}" style="width: 125;"
+                                          value="${pageModel.nextEventStartTime}">
+                                </g:select>
                             </td>
-                            -->
                         </tr>
-                        <tr><td>&nbsp;</td></tr>
+                        <tr><td colspan="4">&nbsp;</td></tr>
+                        <tr>
+                            <td>
+                                <label class="col-lg-2 control-label">To</label>
+                            </td>
+                            <td>
+                                <div class="input-group">
+                                    <label id="toDate" name="toDate" class="form-control"></label>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">
+                                            <span class="glyphicon glyphicon-calendar" style="font-size: 12px; color: #008CBA;"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td>
+                                <g:select class="form-control" id="toTime" name="toTime"
+                                          from="${pageModel.eventTimeIntervals}" style="width: 125;"
+                                          value="${pageModel.nextEventStartTime}">
+                                </g:select>
+                            </td>
+                        </tr>
+                        <tr><td colspan="4">&nbsp;</td></tr>
                         <tr>
                             <td>
                                 <label for="eventDescription" class="col-lg-2 control-label">Description</label>
@@ -52,7 +65,7 @@
                                 <g:textField id="eventDescription" name="eventDescription" class="form-control" style="width: 300px;" placeholder="Untitled Event"></g:textField>
                             </td>
                         </tr>
-                        <tr><td>&nbsp;</td></tr>
+                        <tr><td colspan="4">&nbsp;</td></tr>
                         <tr>
                             <td><label class="col-lg-2 control-label">Calendar</label></td>
                             <td colspan="3">
@@ -60,27 +73,7 @@
                                     optionKey="id" optionValue="description" style="width: 125;"></g:select>
                             </td>
                         </tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr id="rowTimeSelection">
-                            <td><label class="col-lg-2 control-label">From</label></td>
-                            <td>
-                                <g:select class="form-control" id="fromTime" name="fromTime"
-                                          from="${pageModel.eventTimeIntervals}" style="width: 125;"
-                                          value="${pageModel.nextEventStartTime}">
-                                </g:select>
-                            </td>
-                            <td><label class="col-lg-2 control-label">To</label></td>
-                            <td>
-                                <g:select class="form-control" id="toTime" name="toTime"
-                                          from="${pageModel.eventTimeIntervals}" style="width: 125;"
-                                          value="${pageModel.nextEventFinishTime}">
-
-                                          </g:select>
-                            </td>
-                            <td style="padding-left: 10px;">
-                                <!-- Display Interval Here -->
-                            </td>
-                        </tr>
+                        <tr><td colspan="4">&nbsp;</td></tr>
                         <tr>
                             <td>&nbsp;</td>
                             <td>

@@ -23,14 +23,26 @@ class CalendarDataService extends BaseDataService {
 
     List<Calendar> getAllCalendars(Long userId = null, boolean noCache = false) {
 
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
         def cacheKey = (noCache) ? null : buildCacheKey(endpoint)
 
+        def calendars
         try {
-            super.getAll(Calendar.class, typeToken, endpoint, cacheKey, userId)
+            calendars =super.getAll(Calendar.class, typeToken, endpoint, cacheKey, userId)
         } catch (Exception ex) {
             throw ex
         }
+
+        // Order
+        calendars.each { calendar ->
+            def allDayEvents = calendar.events.findAll { it.allDay }
+            def nonAllDayEvents = calendar.events.findAll { !it.allDay }
+            allDayEvents.sort { it.fromTime }
+            nonAllDayEvents.sort { it.fromTime }
+
+            calendar.events = allDayEvents + nonAllDayEvents
+        }
+
+        calendars
     }
 
     Calendar createCalendar(Long userId, boolean _default, String description = "") {
@@ -51,8 +63,6 @@ class CalendarDataService extends BaseDataService {
         cal.active = true
         cal.color = "#800000"  // TODO Do something with this..
         cal._default = _default
-
-        def endpoint = grailsApplication.config.calendarData.host + dataPath as String
 
         def calendar
         try {
@@ -80,5 +90,6 @@ class CalendarDataService extends BaseDataService {
     def getTTL() { 30 }
     def getDataPath() { "/calendar" }
     String getUserToken() { userTokenService.userTokenStringFromSession  }
+    String getEndpoint() { grailsApplication.config.calendarData.host + dataPath as String }
 
 }

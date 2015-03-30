@@ -3,6 +3,7 @@ package com.parentcalendar.domain.ui.page
 import com.parentcalendar.domain.core.CalendarEvent
 import com.parentcalendar.domain.ui.UICalendar
 import com.parentcalendar.domain.core.Calendar
+import com.parentcalendar.services.util.DateUtility
 
 /**
  * UI.Page model for the Calendar page.
@@ -28,12 +29,14 @@ class CalendarModel {
 
         userCalendars.each { calendar ->
             calendar.events.each { event ->
-                if (event.eventDate.clearTime() == date.clearTime()) {
+                // Date argument falls between event from/to time
+                if (DateUtility.isInDateRange(event.fromTime, event.toTime, date)) {
                     events << event
                 }
             }
         }
 
+        events.sort { it.fromTime }
         events
     }
 

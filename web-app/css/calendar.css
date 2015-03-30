@@ -2,6 +2,10 @@
     width: 100%;
     min-width: 800px;
     border: 1px solid #aaa;
+    padding: 0px;
+    margin: 0px;
+    border-collapse: collapse;
+    border-spacing: 0px;
 }
 
 .td-day-container {
@@ -12,8 +16,7 @@
 .calendar-day-container {
     margin: 0px;
     border: 1px solid #a0a0a0;
-    border-radius: 5px;
-    cursor: pointer;
+    /*border-radius: 5px;*/
 }
 .calendar-day-header {
     border: 1px solid #a0a0a0;
@@ -49,14 +52,14 @@
 }
 .highlight-day {
     border: 1px solid mediumpurple;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
 }
 .highlight-today {
     border: 1px solid mediumpurple;
     background-color: #aaccf5;
 }
 .day-number {
-    height: 20px;
+    height: 16px;
     width: 20px;
     margin: 3px;
     text-align: center;
@@ -70,4 +73,22 @@
     text-align: center;
     vertical-align: middle;
     color: #c9c9c9;
+}
+
+.event-same-day {
+    width: 98%;
+    min-height: 20px;
+    padding: 2px;
+    margin: 2px;
+}
+
+.event-all-day {
+    width: 98%;
+    min-height: 20px;
+    border-radius: 2px;
+    padding: 2px;
+    margin: 2px;
+    border: 1px solid #7785AA;
+    background-color: #D4D9E6;
+    text-decoration: none;
 }
