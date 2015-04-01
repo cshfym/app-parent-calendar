@@ -10,7 +10,7 @@
         <table class="table-month-container">
           <!-- Day of week header -->
           <tr>
-            <g:each in="${pageModel.uiCalendar.dayOfWeekList()}" var="dayName">
+            <g:each in="${pageModel.uiCalendar.monthDayHeaderList()}" var="dayName">
               <td class="calendar-day-header">${dayName}</td>
             </g:each>
           </tr>
@@ -21,13 +21,13 @@
                   <g:if test="${day.isToday()}">
                     <div id="day_${day.getCondensedDateString()}" class="calendar-day-container today"
                          onmouseover="highlightToday(this.id)" onmouseout="unHighlightToday(this.id)" onclick="selectDay(this.id)">
-                        <g:render template="innerCalendarEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
+                        <g:render template="innerMonthEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
                     </div>
                   </g:if>
                   <g:else>
                     <div id="day_${day.getCondensedDateString()}" class="calendar-day-container not-in-month"
                        onmouseover="highlightDay(this.id)" onmouseout="unHighlightDay(this.id)" onclick="selectDay(this.id)">
-                        <g:render template="innerCalendarEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
+                        <g:render template="innerMonthEventView" model="[day: day, events: pageModel.getCalendarEventsByDate(day.date)]" />
                     </div>
                   </g:else>
                 </td>
