@@ -32,11 +32,21 @@ class DateUtility {
         normDate1.clearTime() > normDate2.clearTime()
     }
 
+    /* Arg date is before fromDate, or arg date is after toDate = not in range. */
     public static boolean isInDateRange(Date fromDate, Date toDate, Date date) {
 
         if (isBefore(date, fromDate)) { return false }
         if (isAfter(date, toDate)) { return false }
 
         true
+    }
+
+    public static boolean eventSpansDate(Date fromDate, Date toDate, Date date) {
+
+         if (isAfter(date, fromDate) && isBefore(date, toDate)) {
+            return true
+        }
+
+        false
     }
 }

@@ -27,19 +27,36 @@ class CalendarEvent {
     Date updateDate
     boolean active
 
-    public String getEventTimeAndDescription() {
+    public String getEventStartTimeAndDescription() {
 
         if (!fromTime || !description) {
             return ""
         }
 
         def eventPrefix = ""
-        if (eventTimespan == EventTimespan.SAME_DAY) { eventPrefix = timePrefix }
-        if (eventTimespan == EventTimespan.MULTI_DAY) { eventPrefix = timePrefixLong }
+        if (eventTimespan == EventTimespan.SAME_DAY) { eventPrefix = getTimePrefix(fromTime) }
+        if (eventTimespan == EventTimespan.MULTI_DAY) { eventPrefix = "(" + getTimePrefix(fromTime) + ")" }
 
         new StringBuilder()
             .append(eventPrefix)
+            .append(" ")
             .append(description)
+    }
+
+    public String getEventEndTimeAndDescription() {
+
+        if (!fromTime || !description) {
+            return ""
+        }
+
+        def eventSuffix = ""
+        if (eventTimespan == EventTimespan.SAME_DAY) { eventSuffix = getTimePrefix(toTime) }
+        if (eventTimespan == EventTimespan.MULTI_DAY) { eventSuffix = "(" + getTimePrefix(toTime) + ")" }
+
+        new StringBuilder()
+                .append(description)
+                .append(" ")
+                .append(eventSuffix)
     }
 
     public EventTimespan getEventTimespan() {
@@ -58,12 +75,8 @@ class CalendarEvent {
         EventTimespan.SAME_DAY
     }
 
-    protected String getTimePrefix() {
-        new SimpleDateFormat("h:mm").format(fromTime) + new SimpleDateFormat("a").format(fromTime).substring(0,1).toLowerCase() + " "
-    }
-
-    protected String getTimePrefixLong() {
-        "(" + new SimpleDateFormat("h:mm").format(fromTime) + new SimpleDateFormat("a").format(fromTime).substring(0,1).toLowerCase() + ") "
+    protected String getTimePrefix(Date date) {
+        new SimpleDateFormat("h:mm").format(date) + new SimpleDateFormat("a").format(date).substring(0,1).toLowerCase()
     }
 
     @Override

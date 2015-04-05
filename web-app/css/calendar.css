@@ -8,15 +8,29 @@
     border-spacing: 0px;
 }
 
+.td-day-header-container {
+    padding: 1px;
+    width: 14%;
+    vertical-align: top;
+}
 .td-day-container {
     padding: 1px;
     width: 14%;
 }
 
+.td-hours-container {
+    padding: 1px;
+    width: 25px;
+}
+
+.hour-slice {
+    /* border: 1px solid #a0a0a0; */
+    border-bottom: 1px solid #c0c0c0;
+}
+
 .calendar-day-container {
     margin: 0px;
     border: 1px solid #a0a0a0;
-    /*border-radius: 5px;*/
 }
 .calendar-day-header {
     border: 1px solid #a0a0a0;
@@ -28,6 +42,14 @@
     text-align: center;
 }
 
+.calendar-day-header-container {
+    min-height: 25px;
+}
+
+.calendar-hours-container {
+    margin: 0px;
+    font-size: 8px;
+}
 .calendar-navigation-wrapper {
     width: 100%;
     margin: 0px 0px 10px 0px;
@@ -52,7 +74,6 @@
 }
 .highlight-day {
     border: 1px solid mediumpurple;
-    /*border-radius: 5px;*/
 }
 .highlight-today {
     border: 1px solid mediumpurple;

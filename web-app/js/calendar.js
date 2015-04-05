@@ -1,17 +1,49 @@
 
+var currentView = "week";
+
 $(document).ready(function() {
-  adjustCalendarHeight();
+    switchView(currentView);
+    adjustCalendarVisuals();
 });
 
-function adjustCalendarHeight() {
-  var tableHeight = $(window).height() - 200;
-  if (tableHeight < 500) { tableHeight = 500; }
-  var weekCount = $("#weekCount").val();
-  if(!weekCount) {
-    weekCount = 5;
-  }
+function adjustCalendarVisuals() {
+    adjustCalendarHeight();
+    showWeeklyEventRow();
+}
 
-  $(".calendar-day-container").height(tableHeight / weekCount);
+function adjustCalendarHeight() {
+
+    var tableHeight = 500;
+
+    if (currentView == "month") { tableHeight = $(window).height() - 200; }
+    else { tableHeight = 1000; } // Week view.
+
+    if (tableHeight < 500) { tableHeight = 500; }
+    var weekCount = $("#weekCount").val();
+    if(!weekCount) {
+        weekCount = 5;
+    }
+
+    /* Adjust height of day containers for month/week view. */
+    $(".calendar-day-container").height(tableHeight / weekCount);
+    $(".calendar-hours-container").height(tableHeight / weekCount);
+
+    /* Adjust height and width of each hour slice in weekly view. */
+    var sliceHeight = (tableHeight - 40) / 24;
+    var hourSlices = $('[id^="hour-slice_"]')
+    $.each(hourSlices, function(idx, val) {
+        $(val).height(sliceHeight);
+        $(val).width(40);
+    });
+}
+
+function showWeeklyEventRow() {
+
+    if($("#weekAllDayEventCount").val() > 0) {
+        $("#tr-all-day-events").show();
+    } else {
+        $("#tr-all-day-events").hide();
+    }
 }
 
 function launchCreateCalendarEvent(id) {
@@ -37,18 +69,20 @@ function doCheckAllDayEvent(control) {
     }
 }
 
+/*
 function highlightDay(id) {
-  $("#" + id).attr("class", "calendar-day-container highlight-day");
+    $("#" + id).attr("class", "calendar-day-container highlight-day");
 }
 function unHighlightDay(id) {
-  $("#" + id).attr("class", "calendar-day-container");
+    $("#" + id).attr("class", "calendar-day-container");
 }
 function highlightToday(id) {
-  $("#" + id).attr("class", "calendar-day-container highlight-today");
+    $("#" + id).attr("class", "calendar-day-container highlight-today");
 }
 function unHighlightToday(id) {
     $("#" + id).attr("class", "calendar-day-container today");
 }
+*/
 
 function changeCalendarYear(years) {
     var link = "/app-parent-calendar/calendar/changeCalendarYear";
@@ -60,7 +94,7 @@ function changeCalendarYear(years) {
         data: parameters,
         success: function(data) {
             $("#calendar-wrapper").html(data);
-            adjustCalendarHeight();
+            adjustCalendarVisuals();
         },
         error: function(request, status, error) {
             alert(error);
@@ -70,22 +104,22 @@ function changeCalendarYear(years) {
 }
 
 function changeCalendarMonth(days) {
-  var link = "/app-parent-calendar/calendar/changeCalendarMonth";
-  var parameters = { adjust: days };
-  $.ajax({
-    type: "POST",
-    url: link,
-    dataType: 'html',
-    data: parameters,
-    success: function(data) {
-      $("#calendar-wrapper").html(data);
-      adjustCalendarHeight();
-    },
-    error: function(request, status, error) {
-      alert(error);
-    },
-    complete: function() { }
-  });
+    var link = "/app-parent-calendar/calendar/changeCalendarMonth";
+    var parameters = { adjust: days };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarVisuals();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
 }
 
 function changeCalendarWeek(weeks) {
@@ -98,7 +132,7 @@ function changeCalendarWeek(weeks) {
         data: parameters,
         success: function(data) {
             $("#calendar-wrapper").html(data);
-            adjustCalendarHeight();
+            adjustCalendarVisuals();
         },
         error: function(request, status, error) {
             alert(error);
@@ -108,22 +142,22 @@ function changeCalendarWeek(weeks) {
 }
 
 function changeCalendarToday() {
-  var link = "/app-parent-calendar/calendar/changeCalendarToday";
-  var parameters = { };
-  $.ajax({
-    type: "POST",
-    url: link,
-    dataType: 'html',
-    data: parameters,
-    success: function(data) {
-      $("#calendar-wrapper").html(data);
-      adjustCalendarHeight();
-    },
-    error: function(request, status, error) {
-      alert(error);
-    },
-    complete: function() { }
-  });
+    var link = "/app-parent-calendar/calendar/changeCalendarToday";
+    var parameters = { };
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarVisuals();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
 }
 
 function selectDay(id) {
@@ -136,26 +170,7 @@ function selectDay(id) {
         data: parameters,
         success: function(data) {
             $("#calendar-wrapper").html(data);
-            adjustCalendarHeight();
-        },
-        error: function(request, status, error) {
-            alert(error);
-        },
-        complete: function() { }
-    });
-}
-
-function switchView(view) {
-    var link = "/app-parent-calendar/calendar/switchView";
-    var parameters = { viewType: view};
-    $.ajax({
-        type: "POST",
-        url: link,
-        dataType: 'html',
-        data: parameters,
-        success: function(data) {
-            $("#calendar-wrapper").html(data);
-            adjustCalendarHeight();
+            adjustCalendarVisuals();
         },
         error: function(request, status, error) {
             alert(error);
@@ -184,7 +199,7 @@ function createCalendarEvent() {
         data: parameters,
         success: function(data) {
             $("#calendar-wrapper").html(data);
-            adjustCalendarHeight();
+            adjustCalendarVisuals();
         },
         error: function(request, status, error) {
             alert(error);
@@ -193,5 +208,24 @@ function createCalendarEvent() {
             $("#createCalendarEventModal").modal("hide");
         }
     });
+}
 
+function switchView(view) {
+    currentView = view
+    var link = "/app-parent-calendar/calendar/switchView";
+    var parameters = { viewType: view};
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarVisuals();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
 }
