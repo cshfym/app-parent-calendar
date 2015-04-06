@@ -23,7 +23,7 @@
 
                 <!-- All-Day Events Row -->
                 <g:set value="0" var="weekAllDayEventCount" />
-                <tr id="tr-all-day-events" style="border: 1px solid #a0a0a0;">
+                <tr id="tr-all-day-events" style="border: 1px solid #a0a0a0; border-bottom: none;">
                     <td>&nbsp;</td>
                     <g:each in="${currentWeek.days}" var="day">
                         <g:set value="${pageModel.getAllDayCalendarEventsByDate(day.date)}" var="allDayEvents" />
@@ -31,12 +31,12 @@
                         <td class="td-day-header-container">
                             <g:if test="${day.isToday()}">
                                 <div id="day_${day.getCondensedDateString()}" class="calendar-day-header-container today">
-                                    <g:render template="innerWeekEventView" model="[day: day, events: allDayEvents]" />
+                                    <g:render template="innerWeekHeaderView" model="[day: day, events: allDayEvents]" />
                                 </div>
                             </g:if>
                             <g:else>
                                 <div id="day_${day.getCondensedDateString()}" class="calendar-day-header-container">
-                                    <g:render template="innerWeekEventView" model="[day: day, events: allDayEvents]" />
+                                    <g:render template="innerWeekHeaderView" model="[day: day, events: allDayEvents]" />
                                 </div>
                             </g:else>
                         </td>
@@ -45,20 +45,20 @@
                 <input type="hidden" id="weekAllDayEventCount" value="${weekAllDayEventCount}" />
 
                 <!-- Same-Day Events Row -->
-                <tr>
-                    <td class="td-hours-container">
+                <tr style="border: 1px solid #a0a0a0;">
+                    <td>
                         <div class="calendar-hours-container">
                             <table>
                                 <g:each in="${pageModel.getHourTimeIntervals()}" var="timeInterval">
                                     <tr>
-                                        <td>
-                                            <div id="hour-slice_${timeInterval}" class="hour-slice">
-                                            ${timeInterval}
+                                        <td id="td-hour-slice-legend_${timeInterval.replace(" ","")}">
+                                            <div id="hour-slice-legend_${timeInterval.replace(" ","")}" class="hour-slice-legend">
+                                                ${timeInterval}
+                                            </div>
                                         </td>
                                     </tr>
                                 </g:each>
                             </table>
-
                         </div>
                     </td>
                     <g:each in="${currentWeek.days}" var="day">

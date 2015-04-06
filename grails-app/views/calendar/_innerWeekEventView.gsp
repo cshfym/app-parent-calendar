@@ -1,3 +1,11 @@
-<%@ page import="com.parentcalendar.services.util.DateUtility; com.parentcalendar.domain.enums.EventTimespan; java.text.SimpleDateFormat" %>
+<table>
+    <g:each in="${pageModel.getHourTimeIntervals()}" var="timeInterval">
+        <tr>
+            <td id="td-inner-week-slice_${day.getCondensedDateString()}" class="td-inner-week-slice">
+                <div id="hour-slice-day_${day.getCondensedDateString()}">
 
-<g:render template="innerEventView" />
+                </div>
+            </td>
+        </tr>
+    </g:each>
+</table>

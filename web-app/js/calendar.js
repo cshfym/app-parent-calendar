@@ -1,5 +1,6 @@
 
 var currentView = "week";
+var calendarHeight = 500;
 
 $(document).ready(function() {
     switchView(currentView);
@@ -8,32 +9,43 @@ $(document).ready(function() {
 
 function adjustCalendarVisuals() {
     adjustCalendarHeight();
+    adjustWeeklyViewHourSlices();
     showWeeklyEventRow();
 }
 
 function adjustCalendarHeight() {
 
-    var tableHeight = 500;
+    if (currentView == "month") { calendarHeight = $(window).height() - 200; }
+    else { calendarHeight = 1000; } // Week view.
 
-    if (currentView == "month") { tableHeight = $(window).height() - 200; }
-    else { tableHeight = 1000; } // Week view.
-
-    if (tableHeight < 500) { tableHeight = 500; }
+    if (calendarHeight < 500) { calendarHeight = 500; }
     var weekCount = $("#weekCount").val();
     if(!weekCount) {
         weekCount = 5;
     }
 
     /* Adjust height of day containers for month/week view. */
-    $(".calendar-day-container").height(tableHeight / weekCount);
-    $(".calendar-hours-container").height(tableHeight / weekCount);
+    $(".calendar-day-container").height(calendarHeight / weekCount);
+    $(".calendar-hours-container").height(calendarHeight / weekCount);
+}
+
+function adjustWeeklyViewHourSlices() {
 
     /* Adjust height and width of each hour slice in weekly view. */
-    var sliceHeight = (tableHeight - 40) / 24;
-    var hourSlices = $('[id^="hour-slice_"]')
-    $.each(hourSlices, function(idx, val) {
+    var sliceHeight = (calendarHeight - 40) / 24;
+
+    // Legend
+    var legendHourSlices = $('[id^="hour-slice-legend_"]');
+    $.each(legendHourSlices, function(idx, val) {
         $(val).height(sliceHeight);
-        $(val).width(40);
+        $(val).width("42px");
+    });
+
+    var hourSlices = $('[id^="hour-slice-day_"]');
+    $.each(hourSlices, function(idx, val) {
+        // Set dimensions
+        $(val).height(sliceHeight);
+        $(val).width("50px");
     });
 }
 
