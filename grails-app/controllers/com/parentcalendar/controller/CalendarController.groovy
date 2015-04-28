@@ -83,7 +83,7 @@ class CalendarController extends BaseController {
 
         def newDate = new SimpleDateFormat("MM-dd-yyyy").parse(params.selectedDay)
         getUICalendar().date = newDate
-        model.uiCalendar.build()
+        getUICalendar().build()
 
         render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
     }
@@ -91,6 +91,13 @@ class CalendarController extends BaseController {
     def switchView = {
 
         getUICalendar().weekView = (params.viewType.toLowerCase() == "week") ? true : false
+        render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
+    }
+
+    def setWeeklyVisibleHours = {
+
+        getUICalendar().weeklyVisibleHours = Integer.parseInt(params.weeklyVisibleHours as String)
+        getUICalendar().build()
         render (template: (model.uiCalendar.weekView) ? "weekView" : "monthView", model: [ pageModel: model ])
     }
 

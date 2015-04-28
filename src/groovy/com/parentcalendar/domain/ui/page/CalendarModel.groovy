@@ -59,17 +59,7 @@ class CalendarModel {
                 // Not valid for the specified date (falls before or after).
                 if (!DateUtility.isInDateRange(event.fromTime, event.toTime, date)) { return }
 
-                /*
-                // All-day or multi-day that spans the arg date.
-                if (event.allDay ) {
-                    events << event
-                } else if (DateUtility.eventSpansDate(event.fromTime, event.toTime, date)) {
-                    events << event
-                }
-                */
                 events << event
-
-                // Else??
             }
         }
 
@@ -154,13 +144,6 @@ class CalendarModel {
             "9:00 PM",  "9:15 PM",  "9:30 PM",  "9:45 PM",
             "10:00 PM", "10:15 PM", "10:30 PM", "10:45 PM",
             "11:00 PM", "11:15 PM", "11:30 PM", "11:45 PM"
-        ]
-    }
-
-    public List<String> getHourTimeIntervals() {
-        [
-            "12 AM","1 AM","2 AM","3 AM","4 AM","5 AM","6 AM","7 AM","8 AM","9 AM","10 AM","11 AM",
-            "12 PM","1 PM","2 PM","3 PM","4 PM","5 PM","6 PM","7 PM","8 PM","9 PM","10 PM","11 PM"
         ]
     }
 }

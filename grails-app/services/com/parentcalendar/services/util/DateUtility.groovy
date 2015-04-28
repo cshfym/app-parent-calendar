@@ -2,6 +2,8 @@ package com.parentcalendar.services.util
 
 import org.springframework.stereotype.Component
 
+import java.text.SimpleDateFormat
+
 
 @Component
 class DateUtility {
@@ -48,5 +50,52 @@ class DateUtility {
         }
 
         false
+    }
+
+    public static int calculateMinuteDifference(Date fromDate, Date toDate) {
+
+        // intervalTime format = "5 AM", etc.
+
+        def duration
+        use(groovy.time.TimeCategory) {
+            duration = toDate - fromDate
+        }
+
+        (duration.hours * 60) + duration.minutes
+    }
+
+    public static int calculateMinutesFromUpperBound(Date upperBound, Date arg0) {
+
+        def duration
+        use(groovy.time.TimeCategory) {
+            duration = arg0 - upperBound
+        }
+
+        (duration.hours * 60) + duration.minutes
+    }
+
+    public static Date convertIntervalTimeToCurrentDateTime(Date date, String intervalTime) {
+
+        def intervalParts = intervalTime.split(" ")
+
+        Calendar cal = Calendar.getInstance()
+        cal.setTime(date)
+
+        if (intervalParts[0] == "12") { intervalParts[0] = "0" }
+
+        if(intervalParts[1] == "AM") {
+            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(intervalParts[0]))
+        } else {
+            cal.set(Calendar.HOUR_OF_DAY, Integer.parseInt(intervalParts[0]) + 12)
+        }
+
+        cal.set(Calendar.MINUTE, 0)
+
+        cal.time
+    }
+
+    // Format: 7:00p
+    public static String getTimePrefix(Date date) {
+        new SimpleDateFormat("h:mm").format(date) + new SimpleDateFormat("a").format(date).substring(0,1).toLowerCase()
     }
 }

@@ -6,5 +6,3 @@ $("#menu-toggle").click(function(e) {
   $("#wrapper").toggleClass("toggled");
 });
 
-var MONTH_NAMES = new Array("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
-

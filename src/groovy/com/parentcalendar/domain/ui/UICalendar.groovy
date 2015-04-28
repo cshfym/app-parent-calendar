@@ -16,6 +16,7 @@ class UICalendar {
     Date date
     List<UIWeek> weeks = []
     boolean weekView = false
+    int weeklyVisibleHours = 24
 
     /**
      * Default Constructor
@@ -75,6 +76,10 @@ class UICalendar {
 
     public int getVisibleWeekCount() {
         (this.weekView) ? 1 : this.weeks.size()
+    }
+
+    public int getVisibleHours() {
+        this.weeklyVisibleHours
     }
 
     /**

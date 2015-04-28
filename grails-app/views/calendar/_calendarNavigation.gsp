@@ -40,39 +40,47 @@
         <div class="calendar-month-year">${pageModel.uiCalendar.monthName()}</div>
     </div>
 
-    <div class="btn-toolbar calendar-nagivation-right">
-        <div class="btn-group">
-            <a href="#" class="btn btn-sm btn-primary">Default Calendar</a>
-            <a href="#" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <g:each in="${pageModel.userCalendars}" var="userDefinedCalendar">
-                    <g:if test="${!userDefinedCalendar._default}">
-                        <li><a href="#">${userDefinedCalendar.description}</a></li>
+    <div style="float: right;">
+
+        <div class="btn-toolbar calendar-navigation-right">
+            <div class="btn-group">
+                <a href="#" class="btn btn-sm btn-primary">Default Calendar</a>
+                <a href="#" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <g:each in="${pageModel.userCalendars}" var="userDefinedCalendar">
+                        <g:if test="${!userDefinedCalendar._default}">
+                            <li><a href="#">${userDefinedCalendar.description}</a></li>
+                        </g:if>
+                    </g:each>
+                    <g:if test="${pageModel.userCalendars.size() > 1}">
+                        <li class="divider"></li>
                     </g:if>
-                </g:each>
-                <g:if test="${pageModel.userCalendars.size() > 1}">
-                    <li class="divider"></li>
-                </g:if>
-                <li><a href="#">Create New...</a></li>
-            </ul>
+                    <li><a href="#">Create New...</a></li>
+                </ul>
+            </div>
         </div>
+
+        <div class="btn-toolbar calendar-navigation-right">
+            <g:if test="${pageModel.uiCalendar.weekView}">
+                <a href="#" type="button" class="btn btn-sm btn-success" style="width: 125px;" onclick="switchView('month')">Month View</a>
+            </g:if>
+            <g:else>
+                <a href="#" class="btn btn-sm btn-success" style="width: 125px;" onclick="switchView('week')">Week View</a>
+            </g:else>
+
+            <a href="#" class="btn btn-sm btn-success" style="width: 125px;" onclick="changeCalendarToday()">
+                Today&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+            </a>
+        </div>
+
+        <div id="weekly-constraint-group" class="btn-group calendar-navigation-right" role="group">
+            <input type="hidden" id="weeklyVisibleHours" value="${pageModel.uiCalendar.weeklyVisibleHours}" />
+            <a href="#" id="weeklyConstraint12Hours" class="btn btn-sm btn-info" style="width: 65px;" onclick="setWeeklyVisibleHours(12);">12-Hour</a>
+            <a href="#" id="weeklyConstraint18Hours" class="btn btn-sm btn-info" style="width: 65px;" onclick="setWeeklyVisibleHours(18);">18-Hour</a>
+            <a href="#" id="weeklyConstraint24Hours" class="btn btn-sm btn-info" style="width: 65px;" onclick="setWeeklyVisibleHours(24);">24-Hour</a>
+        </div>
+
     </div>
-
-    <div class="btn-toolbar calendar-nagivation-right" style="margin-right: 10px;">
-
-        <g:if test="${pageModel.uiCalendar.weekView}">
-            <a href="#" type="button" class="btn btn-sm btn-success" style="width: 125px;" onclick="switchView('month')">Month View</a>
-        </g:if>
-        <g:else>
-            <a href="#" class="btn btn-sm btn-success" style="width: 125px;" onclick="switchView('week')">Week View</a>
-        </g:else>
-
-        <a href="#" class="btn btn-sm btn-success" style="width: 125px;" onclick="changeCalendarToday()">
-            Today&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-        </a>
-
-    </div>
-
 
     <div class="clearfix"></div>
 </div>

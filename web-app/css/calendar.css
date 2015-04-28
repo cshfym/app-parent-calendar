@@ -1,6 +1,6 @@
 .table-month-container {
     width: 100%;
-    min-width: 800px;
+    min-width: 900px;
     border: 1px solid #aaa;
     padding: 0px;
     margin: 0px;
@@ -13,7 +13,11 @@
     width: 14%;
     vertical-align: top;
 }
-.td-day-container {
+.td-month-day-container {
+    width: 14%;
+    border: 1px solid #a0a0a0;
+}
+.td-week-day-container {
     width: 14%;
 }
 
@@ -25,14 +29,24 @@
 
 .hour-slice-legend {
     border-bottom: 1px solid #c0c0c0;
+    padding-left: 2px;
+    color: #808080;
 }
 
-.td-inner-week-slice {
+.td-inner-week-slice-1 {
+    width: 14%;
+    border-bottom: 1px solid #f0f0f0;
+}
+.td-inner-week-slice-2 {
     width: 14%;
     border-bottom: 1px solid #c0c0c0;
 }
 
 .calendar-day-container {
+    margin: 0px;
+    /*border-left: 1px solid #a0a0a0;*/
+}
+.week-calendar-day-container {
     margin: 0px;
     border-left: 1px solid #a0a0a0;
 }
@@ -62,8 +76,9 @@
 .calendar-navigation-left {
     float: left;
 }
-.calendar-nagivation-right {
+.calendar-navigation-right {
     float: right;
+    margin-right: 10px;
 }
 
 .calendar-month-year {
@@ -73,8 +88,7 @@
 }
 
 .today {
-    border: 1px solid #606060;
-    background-color: #aaccf5;
+    background-color: #F2F5F9;
 }
 .highlight-day {
     border: 1px solid mediumpurple;
@@ -86,7 +100,6 @@
 .day-number {
     height: 16px;
     width: 20px;
-    margin: 3px;
     text-align: center;
     vertical-align: middle;
     color: #060626;
@@ -114,4 +127,23 @@
     border: 1px solid #7785AA;
     background-color: #D4D9E6;
     text-decoration: none;
+}
+
+/* Styling for event containers within weekly columns */
+.event-container-outer {
+    position: relative;
+}
+.event-container {
+    position: absolute;
+    width: 99%;
+    margin-left: 1px;
+    padding: 2px;
+    background-color: lightblue;
+    border: 1px solid #707070;
+}
+.event-container-time {
+
+}
+.event-container-description {
+
 }

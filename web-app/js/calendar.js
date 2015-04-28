@@ -1,6 +1,9 @@
 
 var currentView = "week";
+var weekHourConstraint = 24;
 var calendarHeight = 500;
+var hourSliceHeight = 41;
+var halfHourSliceHeight = 20;
 
 $(document).ready(function() {
     switchView(currentView);
@@ -11,12 +14,39 @@ function adjustCalendarVisuals() {
     adjustCalendarHeight();
     adjustWeeklyViewHourSlices();
     showWeeklyEventRow();
+    adjustNavigationControls();
+}
+
+function adjustNavigationControls() {
+
+    if(currentView == "week") {
+        $("#weekly-constraint-group").show();
+    } else {
+        $("#weekly-constraint-group").hide();
+    }
+
+    $("#weeklyConstraint12Hours").attr("disabled", true);
+    $("#weeklyConstraint18Hours").attr("disabled", true);
+    $("#weeklyConstraint24Hours").attr("disabled", true);
+
+    if (weekHourConstraint == 24) {
+        $("#weeklyConstraint18Hours").removeAttr('disabled');
+        $("#weeklyConstraint12Hours").removeAttr('disabled');
+    }
+    if (weekHourConstraint == 18) {
+        $("#weeklyConstraint24Hours").removeAttr('disabled');
+        $("#weeklyConstraint12Hours").removeAttr('disabled');
+    }
+    if (weekHourConstraint == 12) {
+        $("#weeklyConstraint18Hours").removeAttr('disabled');
+        $("#weeklyConstraint24Hours").removeAttr('disabled');
+    }
 }
 
 function adjustCalendarHeight() {
 
     if (currentView == "month") { calendarHeight = $(window).height() - 200; }
-    else { calendarHeight = 1000; } // Week view.
+    //else { calendarHeight = 1000; } // Week view.
 
     if (calendarHeight < 500) { calendarHeight = 500; }
     var weekCount = $("#weekCount").val();
@@ -26,26 +56,32 @@ function adjustCalendarHeight() {
 
     /* Adjust height of day containers for month/week view. */
     $(".calendar-day-container").height(calendarHeight / weekCount);
-    $(".calendar-hours-container").height(calendarHeight / weekCount);
+
+    //$(".week-calendar-day-container").height(calendarHeight / weekCount);
+
+    //$(".calendar-hours-container").height(calendarHeight / weekCount);
 }
 
 function adjustWeeklyViewHourSlices() {
 
     /* Adjust height and width of each hour slice in weekly view. */
-    var sliceHeight = (calendarHeight - 40) / 24;
 
     // Legend
     var legendHourSlices = $('[id^="hour-slice-legend_"]');
     $.each(legendHourSlices, function(idx, val) {
-        $(val).height(sliceHeight);
+        $(val).height(hourSliceHeight);
         $(val).width("42px");
     });
-
-    var hourSlices = $('[id^="hour-slice-day_"]');
-    $.each(hourSlices, function(idx, val) {
-        // Set dimensions
-        $(val).height(sliceHeight);
-        $(val).width("50px");
+    // All hour slices in weekly view.
+    var hourSlices1 = $('[id^="half-hour-slice-day-1_"]');
+    $.each(hourSlices1, function(idx, val) {
+        $(val).height(halfHourSliceHeight);
+        $(val).width("100px"); // Apply width inside the TD.
+    });
+    var hourSlices2 = $('[id^="half-hour-slice-day-2_"]');
+    $.each(hourSlices2, function(idx, val) {
+        $(val).height(halfHourSliceHeight);
+        $(val).width("100px"); // Apply width inside the TD.
     });
 }
 
@@ -172,9 +208,10 @@ function changeCalendarToday() {
     });
 }
 
-function selectDay(id) {
+function selectDay(elementId, duration) {
+
     var link = "/app-parent-calendar/calendar/selectCalendarDay";
-    var parameters = { selectedDay: id.replace("day_","") };
+    var parameters = { selectedDay: elementId.replace(duration + "-day_","") };
     $.ajax({
         type: "POST",
         url: link,
@@ -223,9 +260,31 @@ function createCalendarEvent() {
 }
 
 function switchView(view) {
+
     currentView = view
     var link = "/app-parent-calendar/calendar/switchView";
     var parameters = { viewType: view};
+    $.ajax({
+        type: "POST",
+        url: link,
+        dataType: 'html',
+        data: parameters,
+        success: function(data) {
+            $("#calendar-wrapper").html(data);
+            adjustCalendarVisuals();
+        },
+        error: function(request, status, error) {
+            alert(error);
+        },
+        complete: function() { }
+    });
+}
+
+function setWeeklyVisibleHours(hours) {
+
+    weekHourConstraint = hours
+    var link = "/app-parent-calendar/calendar/setWeeklyVisibleHours";
+    var parameters = { weeklyVisibleHours: hours};
     $.ajax({
         type: "POST",
         url: link,

@@ -34,29 +34,13 @@ class CalendarEvent {
         }
 
         def eventPrefix = ""
-        if (eventTimespan == EventTimespan.SAME_DAY) { eventPrefix = getTimePrefix(fromTime) }
-        if (eventTimespan == EventTimespan.MULTI_DAY) { eventPrefix = "(" + getTimePrefix(fromTime) + ")" }
+        if (eventTimespan == EventTimespan.SAME_DAY) { eventPrefix = DateUtility.getTimePrefix(fromTime) }
+        if (eventTimespan == EventTimespan.MULTI_DAY) { eventPrefix = "(" + DateUtility.getTimePrefix(fromTime) + ")" }
 
         new StringBuilder()
             .append(eventPrefix)
             .append(" ")
             .append(description)
-    }
-
-    public String getEventEndTimeAndDescription() {
-
-        if (!fromTime || !description) {
-            return ""
-        }
-
-        def eventSuffix = ""
-        if (eventTimespan == EventTimespan.SAME_DAY) { eventSuffix = getTimePrefix(toTime) }
-        if (eventTimespan == EventTimespan.MULTI_DAY) { eventSuffix = "(" + getTimePrefix(toTime) + ")" }
-
-        new StringBuilder()
-                .append(description)
-                .append(" ")
-                .append(eventSuffix)
     }
 
     public EventTimespan getEventTimespan() {
@@ -75,8 +59,9 @@ class CalendarEvent {
         EventTimespan.SAME_DAY
     }
 
-    protected String getTimePrefix(Date date) {
-        new SimpleDateFormat("h:mm").format(date) + new SimpleDateFormat("a").format(date).substring(0,1).toLowerCase()
+    // Format: 7:00p - 9:00p
+    public String getStringTimeSpan() {
+        DateUtility.getTimePrefix(fromTime) + " - " + DateUtility.getTimePrefix(toTime)
     }
 
     @Override

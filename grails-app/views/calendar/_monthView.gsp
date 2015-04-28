@@ -17,17 +17,11 @@
           <g:each in="${pageModel.uiCalendar.weeks}" var="week">
             <tr>
               <g:each in="${week.days}" var="day">
-                <td id="td_${day.toMillis()}" class="td-day-container" onclick="launchCreateCalendarEvent(this.id)">
-                  <g:if test="${day.isToday()}">
-                    <div id="day_${day.getCondensedDateString()}" class="calendar-day-container today"onclick="selectDay(this.id)">
+                <td id="td_${day.toMillis()}" class="td-month-day-container" onclick="launchCreateCalendarEvent(this.id)">
+                    <div id="month-day_${day.getCondensedDateString()}" onclick="selectDay(this.id, 'month')"
+                         class="calendar-day-container ${(day.isToday() ? 'today' : 'not-in-month')}">
                         <g:render template="innerMonthEventView" model="[day: day, events: pageModel.getAllCalendarEventsByDate(day.date)]" />
                     </div>
-                  </g:if>
-                  <g:else>
-                    <div id="day_${day.getCondensedDateString()}" class="calendar-day-container not-in-month" onclick="selectDay(this.id)">
-                        <g:render template="innerMonthEventView" model="[day: day, events: pageModel.getAllCalendarEventsByDate(day.date)]" />
-                    </div>
-                  </g:else>
                 </td>
               </g:each>
             </tr>

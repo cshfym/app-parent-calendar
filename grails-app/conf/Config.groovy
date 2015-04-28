@@ -142,3 +142,4 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 ]
 
 gson.dateformat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+gson.jsdateformat = "EEE MMM dd HH:mm:ss zzz yyyy"

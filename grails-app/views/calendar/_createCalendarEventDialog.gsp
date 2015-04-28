@@ -5,7 +5,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
                     <span class="glyphicon glyphicon-remove-sign"></span>
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Create Event</h4>
+                <h4 class="modal-title" id="lblCreateEvent">Create Event</h4>
             </div>
 
             <div class="modal-body">

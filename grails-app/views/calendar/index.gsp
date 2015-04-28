@@ -13,6 +13,9 @@
   <title>Parent Calendar</title>
 
   <g:javascript src="calendar.js" />
+  <g:javascript src="calendarEvent.js" />
+  <g:javascript src="calendarEventBuilder.js" />
+
   <link rel="stylesheet" href="${resource(dir: 'css', file: 'calendar.css')}" type="text/css">
 
 
